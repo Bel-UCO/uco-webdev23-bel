@@ -214,8 +214,8 @@ class ProductController extends Controller
             'subCategory' => 'required|max:50',
             'price' => 'required|numeric',
             'disc' => 'required|numeric',
-            'image' => 'nullable|url',
-            'otherImage' => 'nullable|url',
+            // 'image' => 'nullable|url',
+            // 'otherImage' => 'nullable|url',
         ]);
 
         // Data baru yang akan ditambahkan
@@ -226,15 +226,15 @@ class ProductController extends Controller
             'name' => $request->input('name'),
             'price' => $request->input('price'),
             'disc' => $request->input('disc'),
-            'image' => $request->input('image', 'default_image.jpg'), // Default jika tidak ada
-            'otherImage' => $request->input('otherImage', 'default_other_image.jpg'), // Default jika tidak ada
+            'image' => $request->input('image', 'https://fastly.picsum.photos/id/902/350/350.jpg?hmac=VGy50trdETKDp9Rtt5brwMQ7JYG7S3kZHCvy5slG1Io'), // Default jika tidak ada
+            'otherImage' => $request->input('otherImage', 'https://fastly.picsum.photos/id/626/350/350.jpg?hmac=LnDvOPY_RWw3EbQJEIZrg1ZBUdG2UhwhuuzL5oGVr0k'), // Default jika tidak ada
         ];
 
         // Tambahkan data baru ke dalam array $products
         array_push($this->products, $newProduct);
 
         // Redirect atau tampilkan pesan sukses
-        return redirect()->back();
+        return redirect()->route('products.list')->with('success', 'Produk berhasil disimpan!');
     }
     public function show($id)
     {
