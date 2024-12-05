@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 
 </head>
 <body>
@@ -36,9 +37,6 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Anak</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Others</a>
                     </li>
                 </ul>
                 <!-- Form Pencarian -->

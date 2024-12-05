@@ -1,0 +1,9 @@
+.category {
+    font-size: 16pt;
+    color: gray !important;
+}
+
+.card:hover {
+    border: 1pt solid black;
+    transform:scale(1.01)
+}
