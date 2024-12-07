@@ -2,13 +2,41 @@
     <div class="form-container">
         <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateInput()">
             @csrf
-            <label for="id">Enter ID (5 characters, letters and numbers only)</label>
-            <input type="text" id="id" name="id" maxlength="5" required>
-
-            <br><br>
 
             <label for="name">Name</label>
             <input type="text" id="name" name="name" required>
+
+            <br><br>
+
+            <label for="gender">Gender</label>
+            <div class="gender-options">
+                <div class="radio">
+                    <input type="radio" id="male" name="gender" value="m" checked required>
+                    <label for="male">Pria</label>
+                </div>
+                <div class="radio">
+                    <input type="radio" id="female" name="gender" value="f" required>
+                    <label for="female">Wanita</label>
+                </div>
+                <div class="radio">
+                    <input type="radio" id="unisex" name="gender" value="u" required>
+                    <label for="unisex">Unisex</label>
+                </div>
+                <div class="radio">
+                    <input type="radio" id="kids" name="gender" value="k" required>
+                    <label for="kids">Anak</label>
+                </div>
+            </div>
+
+            <br>
+
+            <label for="category">Category</label>
+            <input type="text" id="category" name="category" required>
+
+            <br><br>
+
+            <label for="subcategory">Subcategory</label>
+            <input type="text" id="subcategory" name="subcategory" required>
 
             <br><br>
 
@@ -17,34 +45,31 @@
 
             <br><br>
 
-            <label for="disc">Discount (%)</label>
-            <input type="number" id="disc" name="disc" min="0" max="100" step="0.1" required>
+            <label for="discount">Discount (%)</label>
+            <input type="number" id="discount" name="discount" min="0" max="100" step="0.1" required>
 
             <br><br>
 
-            <label for="category">Category</label>
-            <input type="text" id="category" name="category" required>
+            <!-- Gambar pertama (required) -->
+            <label for="image1">Upload Image 1</label>
+            <input type="file" id="image1" name="image1" accept="image/*" required>
 
             <br><br>
 
-            <label for="subCategory">Subcategory</label>
-            <select id="subCategory" name="subCategory" required>
-                <option value="">Select Subcategory</option>
-                <option value="POLO SHIRT">POLO SHIRT</option>
-                <option value="SANDALS">SANDALS</option>
-                <option value="SEPATU">SEPATU</option>
-                <option value="SHORTS">SHORTS</option>
-                <option value="SKIRT">SKIRT</option>
-                <option value="SOCKS">SOCKS</option>
-                <option value="TAS">TAS</option>
-                <option value="TRACK TOP">TRACK TOP</option>
-                <option value="T-SHIRT">T-SHIRT</option>
-            </select>
+            <!-- Gambar kedua (opsional) -->
+            <label for="image2">Upload Image 2</label>
+            <input type="file" id="image2" name="image2" accept="image/*">
 
             <br><br>
 
-            <label for="images">Upload 3 Images (exactly 3 images required)</label>
-            <input type="file" id="images" name="images[]" accept="image/*" multiple required>
+            <!-- Gambar ketiga (opsional) -->
+            <label for="image3">Upload Image 3</label>
+            <input type="file" id="image3" name="image3" accept="image/*">
+
+            <br><br>
+
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description">
 
             <br><br><br>
 
@@ -54,41 +79,21 @@
 
     <script>
         function validateInput() {
-            var input = document.getElementById("id").value;
-
-            // ID Chcker
-            if (input.length !== 5) {
-                alert("ID must be exactly 5 characters.");
-                return false; // Mencegah form disubmit
-            }
-
-            if (!/^[a-zA-Z0-9]+$/.test(input)) {
-                alert("ID must only contain letters and numbers.");
-                return false;
-            }
-
-            // Files Checker
-            var files = document.getElementById("images").files;
-            if (files.length !== 3) {
-                alert("You must upload exactly 3 images.");
-                return false; // Mencegah form disubmit
-            }
-
-            // Disc Checker
-            var discount = document.getElementById("disc").value;
+            // Discount Checker
+            var discount = document.getElementById("discount").value;
             if (discount < 0 || discount > 100) {
                 alert("Discount must be between 0 and 100.");
-                return false; // Mencegah form disubmit
+                return false; // Prevent form submission
             }
 
             // Name Checker
             var name = document.getElementById("name").value.trim();
             if (name === "") {
-                alert("Name cannot be emptys.");
-                return false; // Mencegah form disubmit
+                alert("Name cannot be empty.");
+                return false; // Prevent form submission
             }
 
-            return true; // Form akan disubmit jika validasi berhasil
+            return true; // Allow form submission if validation passes
         }
     </script>
 
@@ -140,6 +145,22 @@
 
         .submit-btn:hover {
             background-color: #45a049;
+        }
+
+        /* CSS untuk mengatur tata letak pilihan radio di satu baris */
+        .gender-options {
+            display: flex;
+            justify-content: flex-start;
+            gap: 20px; /* Jarak antar pilihan radio */
+            flex-wrap: wrap; /* Agar tetap responsif */
+        }
+
+        .gender-options input[type="radio"] {
+            margin-right: 8px; /* Jarak antara input dan label */
+        }
+
+        .gender-options label {
+            margin-right: 10px; /* Jarak antar label */
         }
     </style>
 </x-template>

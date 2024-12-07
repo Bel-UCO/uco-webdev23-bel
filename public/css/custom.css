@@ -7,3 +7,10 @@
     border: 1pt solid black;
     transform:scale(1.01)
 }
+
+.radio {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
