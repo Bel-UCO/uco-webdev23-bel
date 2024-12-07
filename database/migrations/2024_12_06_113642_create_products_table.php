@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
+            $table->id();
             $table->string('name');
             $table->enum('gender', ['m','f','u','k'])->default('m');
             $table->string('category');

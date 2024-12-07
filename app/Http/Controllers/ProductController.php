@@ -14,7 +14,21 @@ class ProductController extends Controller
 
         // dd($products); // Cek apakah ini objek yang benar
 
-        return view('products.index', ['products' => $products]);
+        foreach ($products as $product) {
+            // Jika ada image1, encode ke base64
+            if ($product->image1) {
+                // Tentukan tipe MIME gambar yang benar (misal image/jpeg atau image/png)
+                $imageType = 'image/jpeg'; // Sesuaikan dengan tipe file gambar Anda
+                $encodedImage = base64_encode($product->image1);
+
+                // Membuat base64 data URL
+                $product->image1_base64 = 'data:' . $imageType . ';base64,' . $encodedImage;
+            }
+        }
+
+        // dd($products);
+
+        return view('products.index', compact('products'));
     }
 
 

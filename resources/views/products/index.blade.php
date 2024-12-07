@@ -4,12 +4,10 @@
             <button class="btn btn-secondary" type="button" onclick="window.location.href='{{ route('products.form') }}'">Create +</button>
         </div>
         @foreach ($products as $product)
-        {{-- {{ dd($product->id) }} --}}
-
             <div class="col-3 mb-3 d-flex">
-                <a href="{{ route('products.show', ['id'->$product->id]) }}" style="text-decoration:none; color:black;">
+                <a href="{{ route('products.show', ['id' => $product->id]) }}" style="text-decoration:none; color:black;">
                     <div class="card h-100" style="position: relative;">
-                        <img src="{{ $product->image1 }}"
+                        <img src="{{ $product->image1_base64 }}"
                             class="card-img-top"
                             alt="Product Image"
                             onerror="this.onerror=null;this.src='https://fastly.picsum.photos/id/468/350/350.jpg?hmac=4jGTGKUJEby3tFz0qbVu3WGj1yrH6k2JZVcnjAIkAz0';">
@@ -27,19 +25,27 @@
                                 @else
                                     None
                                 @endif
-                            </p>
-
-                            <p style="color:gray; font-size:8pt">{{ $product->category }}</p>
+                            {{ $product->category }}</p>
 
                             <h5 class="card-title" style="font-size:10pt">{{ $product->subcategory . ' ' . $product->name }}</h5>
 
-                            <p class="card-text" style="font-size: 10pt; color:red;">
-                                <!-- Displaying the price after discount -->
-                                {{ 'Rp. ' . number_format($product->price * ((100 - $product->discount) / 100), 0, ',', '.') }}
-                                <span style="color: gray"><s>
-                                    {{ 'Rp. ' . number_format($product->price, 0, ',', '.') }}
-                                </s></span>
-                                <span style="color: black"> {{ $product->discount }}% </span>
+                            <p class="card-text" style="font-size: 10pt;">
+                                <!-- Check if discount > 0 -->
+                                @if ($product->discount > 0)
+                                    <!-- Display price after discount -->
+                                    <span style="color:red;">
+                                        {{ 'Rp. ' . number_format($product->price * ((100 - $product->discount) / 100), 0, ',', '.') }}
+                                    </span>
+                                    <span style="color: gray"><s>
+                                        {{ 'Rp. ' . number_format($product->price, 0, ',', '.') }}
+                                    </s></span>
+                                    <span style="color: black"> {{ $product->discount }}% </span>
+                                @else
+                                    <!-- If no discount, display price normally -->
+                                    <span style="color:black;">
+                                        {{ 'Rp. ' . number_format($product->price, 0, ',', '.') }}
+                                    </span>
+                                @endif
                             </p>
                         </div>
                         <!-- Button to Edit -->
