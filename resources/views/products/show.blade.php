@@ -1,4 +1,4 @@
-<x-template title="{{ $product['subCategory'] . ' ' . $product['name'] }}">
+<x-template title="{{ $product->subCategory . ' ' . $product->name }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
     <div style="display: flex; flex-direction: row; justify-content: center;">
 
@@ -7,18 +7,18 @@
             <div class="swiper-container" style="width: 600px; height: 600px; position: relative; overflow: hidden; margin: 0 auto;">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
-                        <img src="{{ asset('assets/products/' . $product['subCategory'] . '/' . $product['name'] . '/1.jpg') }}"
+                        <img src="{{ asset('assets/products/' . $product->subCategory . '/' . $product->name . '/1.jpg') }}"
                             alt="Product Image"
                             style="width: 100%; height: 100%; object-fit: cover;"
                             onerror="this.onerror=null;this.src='https://fastly.picsum.photos/id/468/350/350.jpg?hmac=4jGTGKUJEby3tFz0qbVu3WGj1yrH6k2JZVcnjAIkAz0';">
                     </div>
                     <div class="swiper-slide">
-                        <img src="{{ $product['image'] }}"
+                        <img src="{{ $product->image1 }}"
                             alt="Product Image"
                             style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <div class="swiper-slide">
-                        <img src="{{ $product['otherImage'] }}"
+                        <img src="{{ $product->image2 }}"
                             alt="Product Image"
                             style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
@@ -34,17 +34,17 @@
         </div>
 
         <div style="width: 300px; margin-left:20pt">
-            <h5 style="color: gray"> {{$product['category']}} </h5>
-            <h1 style="color: black">{{$product['subCategory'] . ' ' . $product['name']}}</h1>
+            <h5 style="color: gray"> {{$product->category}} </h5>
+            <h1 style="color: black">{{$product->subCategory . ' ' . $product->name}}</h1>
             <p class="card-text" style="font-size: 16pt; color:red;">
-                {{ 'Rp. ' . $product['price'] }}
-                <span style="color: gray"><s>{{ 'Rp. ' . ($product['price'] * (100 - $product['disc'] / 100)) }}</s></span>
-                <span style="color: black"> {{$product['disc'] . '%'}} </span>
+                {{ 'Rp. ' . number_format($product->price * ((100 - $product->discount) / 100), 0, ',', '.') }}
+                <span style="color: gray"><s>{{ 'Rp. ' . number_format($product->price, 0, ',', '.') }}</s></span>
+                <span style="color: black"> {{$product->discount}}% </span>
             </p>
             <br><br><br>
             <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
                 <!-- Tombol Edit -->
-                <a href="{{ route('products.edit', $product['id']) }}" class="btn btn-primary" style="width: 100%; text-align: center;">
+                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary" style="width: 100%; text-align: center;">
                     Edit
                 </a>
             </div>
