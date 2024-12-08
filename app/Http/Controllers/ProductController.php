@@ -172,14 +172,15 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        // $product = collect($this->products)->firstWhere('id', $id);
+        $product = Product::find($id);
 
-        // if (!$product) {
-        //     return redirect()->route('products.index')->with('error', 'Product not found!');
-        // } else {};
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404); // Tanda titik koma di sini
+        }
 
-        // return view('products.edit', ['product' => $product]);
+        return view('products.edit', ['product' => $product]);
     }
+
 
 
     /**
@@ -187,48 +188,108 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'id' => 'required|max:5',
-            'name' => 'nullable|string|max:50',
-            'price' => 'nullable|numeric',
-            'disc' => 'nullable|numeric',
-            'category' => 'nullable|string|max:50',
-            'subCategory'=> 'nullable|string|max:50',
-        ]);
+        $product = Product::find($id);
 
-         // Cek apakah produk ada di array
-        //  if (!isset($this->products[$id])) {
-        //     return response()->json(['error' => 'Product not found'], 404);
-        // }
+        if ($product) {
+            // Mengecek dan mengupdate hanya jika data request tidak kosong atau hanya spasi
+            if (!empty(trim($request->name))) {
+                $product->name = $request->name;
+            }
 
-        // // Update produk dalam array, hanya jika input tidak null
-        // if (isset($validated['name'])) {
-        //     $this->products[$id]['name'] = $validated['name'];
-        // }
+            if (!empty(trim($request->gender))) {
+                $product->gender = $request->gender;
+            }
 
-        // if (isset($validated['price'])) {
-        //     $this->products[$id]['price'] = $validated['price'];
-        // }
+            if (!empty(trim($request->category))) {
+                $product->category = $request->category;
+            }
 
-        // if (isset($validated['disc'])) {
-        //     $this->products[$id]['disc'] = $validated['disc'];
-        // }
+            if (!empty(trim($request->subcategory))) {
+                $product->subcategory = $request->subcategory;
+            }
 
-        // if (isset($validated['category'])) {
-        //     $this->products[$id]['category'] = $validated['category'];
-        // }
+            if (!empty(trim($request->price))) {
+                $product->price = $request->price;
+            }
 
-        // if (isset($validated['subCategory'])) {
-        //     $this->products[$id]['subCategory'] = $validated['subCategory'];
-        // }
+            if (!empty(trim($request->discount))) {
+                $product->discount = $request->discount;
+            }
 
-        // return redirect()->route('products.show', ['id' => $id])->with('success', 'Product updated successfully');
+            if (!empty(trim($request->description))) {
+                $product->description = $request->description;
+            }
+
+            // Mengecek file gambar, jika ada, ambil kontennya, jika tidak, set null
+            if ($request->hasFile('image1')) {
+                $image1 = file_get_contents($request->file('image1')->getRealPath());
+                $product->image1 = $image1;
+            } else {
+                // Jika tidak ada gambar baru, jangan ubah image1
+                $image1 = $product->image1; // Biarkan gambar yang lama tetap ada
+            }
+
+            if ($request->hasFile('image2')) {
+                $image2 = file_get_contents($request->file('image2')->getRealPath());
+                $product->image2 = $image2;
+            } else {
+                // Jika tidak ada gambar baru, jangan ubah image2
+                $image2 = $product->image2; // Biarkan gambar yang lama tetap ada
+            }
+
+            if ($request->hasFile('image3')) {
+                $image3 = file_get_contents($request->file('image3')->getRealPath());
+                $product->image3 = $image3;
+            } else {
+                // Jika tidak ada gambar baru, jangan ubah image3
+                $image3 = $product->image3; // Biarkan gambar yang lama tetap ada
+            }
+
+            // Menyimpan perubahan hanya jika ada perubahan
+            $product->save();
+        } else {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+
+        return redirect()->route('products.show', ['id' => $id])->with('success', 'Product updated successfully');
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function search(Request $request)
+    {
+        // Ambil keyword dari input request
+        $keyword = $request->input('keyword');
+
+        // Pecah kata kunci menjadi array berdasarkan spasi
+        $keywords = explode(' ', $keyword);
+
+        // Mulai query pencarian
+        $query = Product::query();
+
+        // Loop untuk setiap kata kunci dan tambahkan pencarian ke query
+        foreach ($keywords as $word) {
+            $query->where(function($query) use ($word) {
+                $query->where('name', 'like', '%' . trim($word) . '%')
+                    ->orWhere('description', 'like', '%' . trim($word) . '%');
+            });
+        }
+
+        // Ambil hasil pencarian
+        $products = $query->get();
+
+        // Jika tidak ada hasil pencarian
+        if ($products->isEmpty()) {
+            return response()->json(['message' => 'No products found'], 404);
+        }
+
+        // Kembalikan hasil pencarian ke view atau dalam format JSON
+        return view('products.index', ['products' => $products]);
+    }
+
+
+
+
     public function destroy(string $id)
     {
         //

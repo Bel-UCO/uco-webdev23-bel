@@ -17,4 +17,6 @@ Route::prefix('/products')->controller(ProductController::class)->group(function
     Route::get('/show/{id}/image1','image1')->name('products.image1');
     Route::get('/show/{id}/image2','image2')->name('products.image2');
     Route::get('/show/{id}/image3','image3')->name('products.image3');
+    Route::get('/search', 'search')->name('products.search');
+    Route::get('/filter', 'fliter')->name('products.filter');
 });

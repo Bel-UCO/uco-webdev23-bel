@@ -1,29 +1,29 @@
-<x-template title="Create">
+<x-template title="Edit">
     <div class="form-container">
-        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateInput()">
+        <form action="{{ route('products.update', ['id' => $product->id]) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateInput()">
             @csrf
 
             <label for="name">Name</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" id="name" name="name" placeholder="{{ $product->name }}">
 
             <br><br>
 
             <label for="gender">Gender</label>
             <div class="gender-options">
                 <div class="radio">
-                    <input type="radio" id="male" name="gender" value="m" checked required>
+                    <input type="radio" id="male" name="gender" value="m" @if($product->gender == 'm') checked @endif>
                     <label for="male">Men</label>
                 </div>
                 <div class="radio">
-                    <input type="radio" id="female" name="gender" value="f" required>
+                    <input type="radio" id="female" name="gender" value="f" @if($product->gender == 'f') checked @endif>
                     <label for="female">Women</label>
                 </div>
                 <div class="radio">
-                    <input type="radio" id="unisex" name="gender" value="u" required>
+                    <input type="radio" id="unisex" name="gender" value="u" @if($product->gender == 'u') checked @endif>
                     <label for="unisex">Unisex</label>
                 </div>
                 <div class="radio">
-                    <input type="radio" id="kids" name="gender" value="k" required>
+                    <input type="radio" id="kids" name="gender" value="k" @if($product->gender == 'k') checked @endif>
                     <label for="kids">Kids</label>
                 </div>
             </div>
@@ -31,28 +31,28 @@
             <br>
 
             <label for="category">Category</label>
-            <input type="text" id="category" name="category" required>
+            <input type="text" id="category" name="category" placeholder="{{$product->category}}">
 
             <br><br>
 
             <label for="subcategory">Subcategory</label>
-            <input type="text" id="subcategory" name="subcategory" required>
+            <input type="text" id="subcategory" name="subcategory" placeholder="{{$product->subcategory}}">
 
             <br><br>
 
             <label for="price">Price</label>
-            <input type="number" id="price" name="price" step="0.01" required>
+            <input type="number" id="price" name="price" step="0.01" placeholder="{{$product->price}}">
 
             <br><br>
 
             <label for="discount">Discount (%)</label>
-            <input type="number" id="discount" name="discount" min="0" max="100" step="0.1" required>
+            <input type="number" id="discount" name="discount" min="0" max="100" step="0.1" placeholder="{{$product->discount}}">
 
             <br><br>
 
             <!-- Gambar pertama (required) -->
             <label for="image1">Upload Image 1</label>
-            <input type="file" id="image1" name="image1" accept="image/*" required>
+            <input type="file" id="image1" name="image1" accept="image/*">
 
             <br><br>
 
@@ -69,7 +69,7 @@
             <br><br>
 
             <label for="description">Description</label>
-            <input type="text" id="description" name="description">
+            <input type="text" id="description" name="description" placeholder="{{$product->description}}">
 
             <br><br><br>
 
@@ -80,10 +80,9 @@
     <script>
         function validateInput() {
 
-            // Name Checker
-            var name = document.getElementById("name").value.trim();
-            if (name === "") {
-                alert("Name cannot be empty.");
+            var discount = document.getElementById("discount").value;
+            if (discount < 0 || discount > 100) {
+                alert("Discount must be between 0 and 100.");
                 return false; // Prevent form submission
             }
 
