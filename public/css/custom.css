@@ -14,3 +14,7 @@
     align-items: center;
     justify-content: space-between;
 }
+
+.container {
+    padding-left: 0%;
+}

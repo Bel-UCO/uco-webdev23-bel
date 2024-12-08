@@ -14,4 +14,7 @@ Route::prefix('/products')->controller(ProductController::class)->group(function
     Route::post('/store', 'store')->name('products.store');
     Route::post('/update/{id}', 'update')->name('products.update');
     Route::get('/show/{id}', 'show')->name('products.show');
+    Route::get('/show/{id}/image1','image1')->name('products.image1');
+    Route::get('/show/{id}/image2','image2')->name('products.image2');
+    Route::get('/show/{id}/image3','image3')->name('products.image3');
 });
