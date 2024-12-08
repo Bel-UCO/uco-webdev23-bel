@@ -16,11 +16,11 @@
                             <!-- Gender display logic -->
                             <p style="color:gray; font-size:8pt">
                                 @if ($product->gender == 'm')
-                                    Pria
+                                    Men
                                 @elseif ($product->gender == 'f')
-                                    Wanita
+                                    Women
                                 @elseif ($product->gender == 'k')
-                                    Anak
+                                    Kids
                                 @elseif ($product->gender == 'u')
                                     Unisex
                                 @else
@@ -28,7 +28,7 @@
                                 @endif
                             {{ $product->category }}</p>
 
-                            <h5 class="card-title" style="font-size:10pt">{{ $product->subcategory . ' ' . $product->name }}</h5>
+                            <h5 class="card-title" style="font-size:10pt">{{ $product->name . ' ' . $product->subcategory }}</h5>
 
                             <p class="card-text" style="font-size: 10pt;">
                                 <!-- Check if discount > 0 -->

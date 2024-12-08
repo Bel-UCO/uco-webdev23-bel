@@ -1,71 +1,93 @@
 <x-template title="Create">
     <div class="form-container">
-        <form action="{{ route('products.update', $product['id']) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateInput()">
+        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateInput()">
             @csrf
-            <label for="id">Enter ID (5 characters, letters and numbers only)</label>
-            <input type="text" id="id" name="id" maxlength="5" placeholder="{{$product['id']}}" readonly>
+
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
 
             <br><br>
 
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" placeholder="{{$product['name']}}">
+            <label for="gender">Gender</label>
+            <div class="gender-options">
+                <div class="radio">
+                    <input type="radio" id="male" name="gender" value="m" checked required>
+                    <label for="male">Men</label>
+                </div>
+                <div class="radio">
+                    <input type="radio" id="female" name="gender" value="f" required>
+                    <label for="female">Women</label>
+                </div>
+                <div class="radio">
+                    <input type="radio" id="unisex" name="gender" value="u" required>
+                    <label for="unisex">Unisex</label>
+                </div>
+                <div class="radio">
+                    <input type="radio" id="kids" name="gender" value="k" required>
+                    <label for="kids">Kids</label>
+                </div>
+            </div>
+
+            <br>
+
+            <label for="category">Category</label>
+            <input type="text" id="category" name="category" required>
+
+            <br><br>
+
+            <label for="subcategory">Subcategory</label>
+            <input type="text" id="subcategory" name="subcategory" required>
 
             <br><br>
 
             <label for="price">Price</label>
-            <input type="number" id="price" name="price" step="0.01" placeholder="{{$product['price']}}">
+            <input type="number" id="price" name="price" step="0.01" required>
 
             <br><br>
 
-            <label for="disc">Discount (%)</label>
-            <input type="number" id="disc" name="disc" min="0" max="100" step="0.1" placeholder="{{$product['disc']}}">
+            <label for="discount">Discount (%)</label>
+            <input type="number" id="discount" name="discount" min="0" max="100" step="0.1" required>
 
             <br><br>
 
-            <label for="category">Category</label>
-            <input type="text" id="category" name="category" placeholder="{{$product['category']}}">
+            <!-- Gambar pertama (required) -->
+            <label for="image1">Upload Image 1</label>
+            <input type="file" id="image1" name="image1" accept="image/*" required>
 
             <br><br>
 
-            <label for="suCategory">Subcategory</label>
-            <select id="subCategory" name="subCategory">
-                <option value="">{{$product['subCategory']}}</option>
-                <option value="POLO SHIRT">POLO SHIRT</option>
-                <option value="SANDALS">SANDALS</option>
-                <option value="SEPATU">SEPATU</option>
-                <option value="SHORTS">SHORTS</option>
-                <option value="SKIRT">SKIRT</option>
-                <option value="SOCKS">SOCKS</option>
-                <option value="TAS">TAS</option>
-                <option value="TRACK TOP">TRACK TOP</option>
-                <option value="T-SHIRT">T-SHIRT</option>
-            </select>
+            <!-- Gambar kedua (opsional) -->
+            <label for="image2">Upload Image 2</label>
+            <input type="file" id="image2" name="image2" accept="image/*">
+
+            <br><br>
+
+            <!-- Gambar ketiga (opsional) -->
+            <label for="image3">Upload Image 3</label>
+            <input type="file" id="image3" name="image3" accept="image/*">
+
+            <br><br>
+
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description">
 
             <br><br><br>
 
-            <button type="submit" class="submit-btn">Save Changes</button>
+            <button type="submit" class="submit-btn">Submit</button>
         </form>
     </div>
 
     <script>
         function validateInput() {
-            var input = document.getElementById("id").value;
-
-            // Disc Checker
-            var discount = document.getElementById("discount").value;
-            if (discount < 0 || discount > 100) {
-                alert("Discount must be between 0 and 100.");
-                return false; // Mencegah form disubmit
-            }
 
             // Name Checker
             var name = document.getElementById("name").value.trim();
             if (name === "") {
-                alert("Name cannot be emptys.");
-                return false; // Mencegah form disubmit
+                alert("Name cannot be empty.");
+                return false; // Prevent form submission
             }
 
-            return true; // Form akan disubmit jika validasi berhasil
+            return true; // Allow form submission if validation passes
         }
     </script>
 
@@ -117,6 +139,22 @@
 
         .submit-btn:hover {
             background-color: #45a049;
+        }
+
+        /* CSS untuk mengatur tata letak pilihan radio di satu baris */
+        .gender-options {
+            display: flex;
+            justify-content: flex-start;
+            gap: 20px; /* Jarak antar pilihan radio */
+            flex-wrap: wrap; /* Agar tetap responsif */
+        }
+
+        .gender-options input[type="radio"] {
+            margin-right: 8px; /* Jarak antara input dan label */
+        }
+
+        .gender-options label {
+            margin-right: 10px; /* Jarak antar label */
         }
     </style>
 </x-template>

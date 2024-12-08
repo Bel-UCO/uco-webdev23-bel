@@ -38,17 +38,17 @@
         <div style="width: 500px; margin-left:20pt">
             <h5 style="color: gray">
                 @if ($product->gender == 'm')
-                                    Pria
+                                    Man
                                 @elseif ($product->gender == 'f')
-                                    Wanita
+                                    Women
                                 @elseif ($product->gender == 'k')
-                                    Anak
+                                    Kids
                                 @elseif ($product->gender == 'u')
                                     Unisex
                                 @else
                                     None
                                 @endif {{$product->category}} </h5>
-            <h1 style="color: black">{{$product->subCategory . ' ' . $product->name}}</h1>
+            <h1 style="color: black">{{ $product->name . ' ' . $product->subcategory }}</h1>
             <p class="card-text" style="font-size: 16pt;
                 @if ($product->discount > 0)
                     color:red;

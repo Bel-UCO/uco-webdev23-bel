@@ -12,11 +12,11 @@
             <div class="gender-options">
                 <div class="radio">
                     <input type="radio" id="male" name="gender" value="m" checked required>
-                    <label for="male">Pria</label>
+                    <label for="male">Men</label>
                 </div>
                 <div class="radio">
                     <input type="radio" id="female" name="gender" value="f" required>
-                    <label for="female">Wanita</label>
+                    <label for="female">Women</label>
                 </div>
                 <div class="radio">
                     <input type="radio" id="unisex" name="gender" value="u" required>
@@ -24,7 +24,7 @@
                 </div>
                 <div class="radio">
                     <input type="radio" id="kids" name="gender" value="k" required>
-                    <label for="kids">Anak</label>
+                    <label for="kids">Kids</label>
                 </div>
             </div>
 

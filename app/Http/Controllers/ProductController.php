@@ -44,49 +44,49 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        // $processed_image1 -> image1
+{
+    // Handle image uploads
+    if ($request->hasFile('image1')) {
+        $image1 = file_get_contents($request->file('image1')->getRealPath());
+    } else {
+        $image1 = null;
+    }
 
-        if ($request->hasFile('image1')) {
-            $image1 = file_get_contents($request->file('image1')->getRealPath());
-        } else {
-            $image1 = null;
-        }
+    if ($request->hasFile('image2')) {
+        $image2 = file_get_contents($request->file('image2')->getRealPath());
+    } else {
+        $image2 = null;
+    }
 
-        if ($request->hasFile('image2')) {
-            $image2 = file_get_contents($request->file('image2')->getRealPath());
+    if ($request->hasFile('image3')) {
+        $image3 = file_get_contents($request->file('image3')->getRealPath());
+    } else {
+        $image3 = null;
+    }
 
-        } else {
-            $image2 = null;
-        }
+    // Formatting fields before saving
+    $name = strtoupper($request->name);  // Convert all characters to uppercase
+    $subcategory = strtoupper($request->subcategory);  // Convert all characters to uppercase
+    $category = ucwords(strtolower($request->category));  // Convert to camel case (first letter capitalized, the rest lowercase)
 
-        if ($request->hasFile('image3')) {
-            $image3 = file_get_contents($request->file('image3')->getRealPath());
-
-        } else {
-            $image3 = null;
-        }
-
-
-        // Data baru yang akan ditambahkan
-        $product = Product::create([
-        'name' => $request->name,
+    // Data baru yang akan ditambahkan
+    $product = Product::create([
+        'name' => $name,
         'gender' => $request->gender,
-        'category' => $request->category,
-        'subcategory' => $request->subcategory,
+        'category' => $category,
+        'subcategory' => $subcategory,
         'price' => $request->price,
-        'discount'=> $request->discount,
+        'discount' => $request->discount,
         'image1' => $image1,
         'image2' => $image2,
         'image3' => $image3,
         'description' => $request->description,
-        ]);
+    ]);
 
+    // Return the response
+    return redirect()->route('products.list')->with('success', 'Product created successfully!');
+}
 
-
-        // Redirect atau tampilkan pesan sukses
-        return redirect()->route('products.list')->with('success', 'Produk berhasil disimpan!');
-    }
 
     public function image1($id)
     {
