@@ -45,6 +45,29 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        // $processed_image1 -> image1
+
+        if ($request->hasFile('image1')) {
+            $image1 = file_get_contents($request->file('image1')->getRealPath());
+        } else {
+            $image1 = null;
+        }
+
+        if ($request->hasFile('image2')) {
+            $image2 = file_get_contents($request->file('image2')->getRealPath());
+
+        } else {
+            $image2 = null;
+        }
+
+        if ($request->hasFile('image3')) {
+            $image3 = file_get_contents($request->file('image3')->getRealPath());
+
+        } else {
+            $image3 = null;
+        }
+
+
         // Data baru yang akan ditambahkan
         $product = Product::create([
         'name' => $request->name,
@@ -53,9 +76,9 @@ class ProductController extends Controller
         'subcategory' => $request->subcategory,
         'price' => $request->price,
         'discount'=> $request->discount,
-        'image1' => $request->image1,
-        'image2' => $request->image2,
-        'image3' => $request->image3,
+        'image1' => $image1,
+        'image2' => $image2,
+        'image3' => $image3,
         'description' => $request->description,
         ]);
 
@@ -64,6 +87,70 @@ class ProductController extends Controller
         // Redirect atau tampilkan pesan sukses
         return redirect()->route('products.list')->with('success', 'Produk berhasil disimpan!');
     }
+
+    public function image1($id)
+    {
+        // Fetch the product by ID
+        $product = Product::findOrFail($id);
+
+        // Get the image from the database (BLOB)
+        $image1 = $product->image1;
+
+        // If no image is found, return a placeholder image
+        if (!$image1) {
+            abort(404, 'Image not found');
+        }
+
+        // Determine the MIME type of the image (you can adjust this based on your needs)
+        $mimeType = 'image/jpeg'; // Change as necessary (you can add a check for PNG, GIF, etc.)
+
+        // Return the image as a response with the appropriate MIME type
+        return response($image1, 200)
+            ->header('Content-Type', $mimeType);
+    }
+
+    public function image2($id)
+    {
+        // Fetch the product by ID
+        $product = Product::findOrFail($id);
+
+        // Get the image from the database (BLOB)
+        $image2 = $product->image2;
+
+        // If no image is found, return a placeholder image
+        if (!$image2) {
+            abort(404, 'Image not found');
+        }
+
+        // Determine the MIME type of the image (you can adjust this based on your needs)
+        $mimeType = 'image/jpeg'; // Change as necessary (you can add a check for PNG, GIF, etc.)
+
+        // Return the image as a response with the appropriate MIME type
+        return response($image2, 200)
+            ->header('Content-Type', $mimeType);
+    }
+
+    public function image3($id)
+    {
+        // Fetch the product by ID
+        $product = Product::findOrFail($id);
+
+        // Get the image from the database (BLOB)
+        $image3 = $product->image3;
+
+        // If no image is found, return a placeholder image
+        if (!$image3) {
+            abort(404, 'Image not found');
+        }
+
+        // Determine the MIME type of the image (you can adjust this based on your needs)
+        $mimeType = 'image/jpeg'; // Change as necessary (you can add a check for PNG, GIF, etc.)
+
+        // Return the image as a response with the appropriate MIME type
+        return response($image3, 200)
+            ->header('Content-Type', $mimeType);
+    }
+
 
     public function show($id)
     {

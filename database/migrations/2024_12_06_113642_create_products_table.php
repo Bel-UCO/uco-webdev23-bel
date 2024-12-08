@@ -19,12 +19,17 @@ return new class extends Migration
             $table->string('subcategory');
             $table->integer('price');
             $table->integer('discount');
-            $table->binary('image1');
-            $table->binary('image2')->nullable();
-            $table->binary('image3')->nullable();
+            $table->text('image1');  // Ganti dengan text jika kolom ini berisi data besar (untuk LONGBLOB)
+            $table->text('image2')->nullable();
+            $table->text('image3')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
         });
+
+        // Menggunakan raw SQL untuk mengubah kolom image menjadi LONGBLOB
+        DB::statement('ALTER TABLE products MODIFY image1 LONGBLOB');
+        DB::statement('ALTER TABLE products MODIFY image2 LONGBLOB');
+        DB::statement('ALTER TABLE products MODIFY image3 LONGBLOB');
     }
 
     /**

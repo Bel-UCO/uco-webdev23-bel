@@ -4,10 +4,11 @@
             <button class="btn btn-secondary" type="button" onclick="window.location.href='{{ route('products.form') }}'">Create +</button>
         </div>
         @foreach ($products as $product)
+        {{-- @dd($product) --}}
             <div class="col-3 mb-3 d-flex">
                 <a href="{{ route('products.show', ['id' => $product->id]) }}" style="text-decoration:none; color:black;">
                     <div class="card h-100" style="position: relative;">
-                        <img src="{{ $product->image1_base64 }}"
+                        <img src="{{ route('products.image1', ['id' => $product->id]) }}"
                             class="card-img-top"
                             alt="Product Image"
                             onerror="this.onerror=null;this.src='https://fastly.picsum.photos/id/468/350/350.jpg?hmac=4jGTGKUJEby3tFz0qbVu3WGj1yrH6k2JZVcnjAIkAz0';">

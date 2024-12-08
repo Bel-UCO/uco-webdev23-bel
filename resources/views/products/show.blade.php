@@ -7,18 +7,18 @@
             <div class="swiper-container" style="width: 600px; height: 600px; position: relative; overflow: hidden; margin: 0 auto;">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
-                        <img src="{{ asset('assets/products/' . $product->subCategory . '/' . $product->name . '/1.jpg') }}"
+                        <img src="{{ route('products.image1', ['id' => $product->id]) }}"
                             alt="Product Image"
                             style="width: 100%; height: 100%; object-fit: cover;"
                             onerror="this.onerror=null;this.src='https://fastly.picsum.photos/id/468/350/350.jpg?hmac=4jGTGKUJEby3tFz0qbVu3WGj1yrH6k2JZVcnjAIkAz0';">
                     </div>
                     <div class="swiper-slide">
-                        <img src="{{ $product->image1 }}"
+                        <img src="{{ route('products.image2', ['id' => $product->id]) }}"
                             alt="Product Image"
                             style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <div class="swiper-slide">
-                        <img src="{{ $product->image2 }}"
+                        <img src="{{ route('products.image3', ['id' => $product->id]) }}"
                             alt="Product Image"
                             style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
@@ -33,15 +33,37 @@
             </div>
         </div>
 
-        <div style="width: 300px; margin-left:20pt">
-            <h5 style="color: gray"> {{$product->category}} </h5>
+        <div style="width: 500px; margin-left:20pt">
+            <h5 style="color: gray">
+                @if ($product->gender == 'm')
+                                    Pria
+                                @elseif ($product->gender == 'f')
+                                    Wanita
+                                @elseif ($product->gender == 'k')
+                                    Anak
+                                @elseif ($product->gender == 'u')
+                                    Unisex
+                                @else
+                                    None
+                                @endif {{$product->category}} </h5>
             <h1 style="color: black">{{$product->subCategory . ' ' . $product->name}}</h1>
-            <p class="card-text" style="font-size: 16pt; color:red;">
-                {{ 'Rp. ' . number_format($product->price * ((100 - $product->discount) / 100), 0, ',', '.') }}
-                <span style="color: gray"><s>{{ 'Rp. ' . number_format($product->price, 0, ',', '.') }}</s></span>
-                <span style="color: black"> {{$product->discount}}% </span>
+            <p class="card-text" style="font-size: 16pt;
+                @if ($product->discount > 0)
+                    color:red;
+                @else
+                    color:black;
+                @endif">
+                @if ($product->discount > 0)
+                    {{ 'Rp. ' . number_format($product->price * ((100 - $product->discount) / 100), 0, ',', '.') }}
+                    <span style="color: gray"><s>{{ 'Rp. ' . number_format($product->price, 0, ',', '.') }}</s></span>
+                    <span style="color: black"> {{$product->discount}}% </span>
+                @else
+                    {{ 'Rp. ' . number_format($product->price, 0, ',', '.') }}
+                @endif
             </p>
-            <br><br><br>
+            <br>
+            <p>{{ $product->description}}</p>
+            <br><br>
             <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
                 <!-- Tombol Edit -->
                 <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary" style="width: 100%; text-align: center;">
