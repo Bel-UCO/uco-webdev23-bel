@@ -9,29 +9,49 @@ use App\Models\Product;
 class ProductController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('category')->get();
+        // Ambil semua produk beserta kategori (relasi)
+        $products = Product::with('category');
 
-        // dd($products); // Cek apakah ini objek yang benar
+        // Filter berdasarkan kategori jika ada
+        if ($request->has('category')) {
+            $products = $products->where('category_id', $request->category);
+        }
 
+        // Sorting berdasarkan parameter jika ada
+        if ($request->has('sort_by')) {
+            if ($request->sort_by == 'price_asc') {
+                $products = $products->orderByRaw('price - (price * discount / 100) ASC');
+            } elseif ($request->sort_by == 'price_desc') {
+                $products = $products->orderByRaw('price - (price * discount / 100) DESC');
+            } elseif ($request->sort_by == 'name_asc') {
+                $products = $products->orderBy('name', 'asc');
+            } elseif ($request->sort_by == 'name_desc') {
+                $products = $products->orderBy('name', 'desc');
+            }
+        }
+
+        // Filter harga berdasarkan rentang harga jika ada
+        if ($request->has('price_min') && $request->has('price_max')) {
+            $products = $products->whereRaw('price - (price * discount / 100) BETWEEN ? AND ?', [$request->price_min, $request->price_max]);
+        }
+
+        // Ambil data produk
+        $products = $products->get();
+
+        // Encode image jika ada
         foreach ($products as $product) {
-            // Jika ada image1, encode ke base64
             if ($product->image1) {
-                // Tentukan tipe MIME gambar yang benar (misal image/jpeg atau image/png)
-                $imageType = 'image/jpeg'; // Sesuaikan dengan tipe file gambar Anda
+                $imageType = 'image/jpeg'; // Tentukan MIME type sesuai dengan jenis gambar
                 $encodedImage = base64_encode($product->image1);
-
-                // Membuat base64 data URL
                 $product->image1_base64 = 'data:' . $imageType . ';base64,' . $encodedImage;
             }
         }
 
-        // dd($products);
-
+        // Kirim data ke view
         return view('products.index', compact('products'));
     }
-
 
     /**
      * Show the form for creating a new resource.
