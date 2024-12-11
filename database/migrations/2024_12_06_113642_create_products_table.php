@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->enum('gender', ['m','f','u','k'])->default('m');
-            $table->string('category');
+            $table->string('category_id');
             $table->string('subcategory');
             $table->integer('price');
             $table->integer('discount');

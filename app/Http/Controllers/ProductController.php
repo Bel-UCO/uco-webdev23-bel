@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Product;
 
@@ -10,7 +11,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::get();
+        $products = Product::with('category')->get();
 
         // dd($products); // Cek apakah ini objek yang benar
 
@@ -37,7 +38,10 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create');
+        $categories = Category::getOrdered();
+
+    // Mengirim data kategori ke view
+        return view('products.create', compact('categories'));
     }
 
     /**
@@ -67,13 +71,12 @@ class ProductController extends Controller
     // Formatting fields before saving
     $name = strtoupper($request->name);  // Convert all characters to uppercase
     $subcategory = strtoupper($request->subcategory);  // Convert all characters to uppercase
-    $category = ucwords(strtolower($request->category));  // Convert to camel case (first letter capitalized, the rest lowercase)
 
     // Data baru yang akan ditambahkan
     $product = Product::create([
         'name' => $name,
         'gender' => $request->gender,
-        'category' => $category,
+        'category_id' => $request->category_id,
         'subcategory' => $subcategory,
         'price' => $request->price,
         'discount' => $request->discount,
@@ -157,13 +160,15 @@ class ProductController extends Controller
         // Cek produk berdasarkan ID
         $product = Product::find($id);
 
+        $category = $product->category;
+
         // Pastikan produk ditemukan
         if (!$product) {
             return redirect()->route('products.index')->with('error', 'Produk tidak ditemukan!');
         }
 
         // Kirimkan data produk ke view
-        return view('products.show', ['product' => $product]);
+        return view('products.show', ['product' => $product, 'category'=> $category]);
     }
 
 
@@ -172,13 +177,22 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
+        // Mengambil produk berdasarkan ID
         $product = Product::find($id);
 
+        // Mengambil semua kategori untuk dropdown
+        $categories = Category::getOrdered();
+
+        // Mengecek jika produk tidak ditemukan
         if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404); // Tanda titik koma di sini
+            return response()->json(['message' => 'Product not found'], 404);
         }
 
-        return view('products.edit', ['product' => $product]);
+        // Mengirim data produk dan kategori ke view
+        return view('products.edit', [
+            'product' => $product,
+            'categories' => $categories
+        ]);
     }
 
 
@@ -200,8 +214,8 @@ class ProductController extends Controller
                 $product->gender = $request->gender;
             }
 
-            if (!empty(trim($request->category))) {
-                $product->category = $request->category;
+            if (!empty(trim($request->category_id))) {
+                $product->category_id = $request->category_id;
             }
 
             if (!empty(trim($request->subcategory))) {

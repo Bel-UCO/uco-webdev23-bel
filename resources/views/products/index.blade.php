@@ -26,7 +26,7 @@
                                 @else
                                     None
                                 @endif
-                            {{ $product->category }}</p>
+                            {{ $product->category->name }}</p>
 
                             <h5 class="card-title" style="font-size:10pt">{{ $product->name . ' ' . $product->subcategory }}</h5>
 

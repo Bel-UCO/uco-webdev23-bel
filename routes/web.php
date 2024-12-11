@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 
@@ -19,4 +20,13 @@ Route::prefix('/products')->controller(ProductController::class)->group(function
     Route::get('/show/{id}/image3','image3')->name('products.image3');
     Route::get('/search', 'search')->name('products.search');
     Route::get('/filter', 'fliter')->name('products.filter');
+});
+
+Route::prefix('/categories')->controller(CategoryController::class)->group(function() {
+	Route::get('/', 'index')->name('categories.list');
+	Route::get('/create', 'create')->name('categories.create');
+	Route::post('/store', 'store')->name('categories.store');
+	Route::get('/edit/{id}', 'edit')->name('categories.edit');
+	Route::post('/update/{id}', 'update')->name('categories.update');
+	Route::post('/destroy/{id}', 'destroy')->name('categories.destroy');
 });

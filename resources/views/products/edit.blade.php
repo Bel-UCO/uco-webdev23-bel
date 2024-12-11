@@ -30,10 +30,17 @@
 
             <br>
 
-            <label for="category">Category</label>
-            <input type="text" id="category" name="category" placeholder="{{$product->category}}">
+            <div class="mb-3">
+                <label for="description" class="form-label">Category</label>
+                <select class="form-select" id="category_id" name="category_id" required>
+                    <option value="" disabled selected>Select category</option>
+                    @foreach($categories as $category)
+                    <option value="{{ $category->id }}" @if(isset($product) && $product->category_id == $category->id) selected @endif>{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
 
-            <br><br>
+            <br>
 
             <label for="subcategory">Subcategory</label>
             <input type="text" id="subcategory" name="subcategory" placeholder="{{$product->subcategory}}">
