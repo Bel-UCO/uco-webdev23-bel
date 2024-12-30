@@ -38,7 +38,7 @@ class ProductController extends Controller
         }
 
         // Ambil data produk
-        $products = $products->get();
+        $products = $products->paginate(16);
 
         // Encode image jika ada
         foreach ($products as $product) {

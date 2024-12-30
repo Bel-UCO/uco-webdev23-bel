@@ -18,3 +18,7 @@
 .container {
     padding-left: 0%;
 }
+
+.pagination .page-link span {
+    font-size: 12px; /* Ukuran simbol panah */
+}
