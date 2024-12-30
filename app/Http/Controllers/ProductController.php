@@ -33,12 +33,13 @@ class ProductController extends Controller
         }
 
         // Filter harga berdasarkan rentang harga jika ada
-        if ($request->has('price_min') && $request->has('price_max')) {
-            $products = $products->whereRaw('price - (price * discount / 100) BETWEEN ? AND ?', [$request->price_min, $request->price_max]);
+        if ($request->has('min_price') && $request->has('max_price')) {
+            // dd($request->min_price, $request->max_price);
+            $products = $products->whereRaw('price - (price * discount / 100) BETWEEN ? AND ?', [$request->min_price, $request->max_price]);
         }
 
         // Ambil data produk
-        $products = $products->paginate(16);
+        $products = $products->get();
 
         // Encode image jika ada
         foreach ($products as $product) {
