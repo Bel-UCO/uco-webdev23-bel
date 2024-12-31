@@ -9,7 +9,7 @@ use App\Http\Controllers\RegistrationController;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
 Route::prefix('/products')->controller(ProductController::class)->group(function () {
     Route::get('/', 'index')->name('products.list');

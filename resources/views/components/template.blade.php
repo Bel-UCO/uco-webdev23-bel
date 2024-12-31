@@ -30,7 +30,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{{ route('products.list') }}">All Products</a>
@@ -44,20 +44,43 @@
                 </ul>
                 <!-- Form Pencarian -->
                 <form class="d-flex align-items-center" role="search" action="{{ route('products.search') }}" method="GET">
-                    <a href="/cart">
+
+                    <input class="form-control me-2" type="search" name="keyword" placeholder="Search" aria-label="Search" required>
+                    <button class="btn btn-secondary" type="submit" style="margin-right:10px">Search</button>
+
+                </form>
+                @auth
+                    <a href={{ route('cart.list') }}>
                         <svg xmlns="http://www.w3.org/2000/svg"
                             width="25"
                             height="25"
                             fill="black"
                             class="bi bi-cart"
                             viewBox="0 0 20 20"
-                            style="margin-right: 10px;">
+                            style="margin-left: 10px;">
                             <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                         </svg>
                     </a>
-                    <input class="form-control me-2" type="search" name="keyword" placeholder="Search" aria-label="Search" required>
-                    <button class="btn btn-secondary" type="submit">Search</button>
-                </form>
+                    <div class="dropdown">
+                        <a class="btn dropdown-toggle border" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ auth()->user()->name }}
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Purchase history</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-danger">Log out</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-primary text-nowrap">Login</a>
+                @endauth
             </div>
 
         </div>

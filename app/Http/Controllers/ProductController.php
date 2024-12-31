@@ -314,9 +314,9 @@ class ProductController extends Controller
         $products = $query->get();
 
         // Jika tidak ada hasil pencarian
-        if ($products->isEmpty()) {
-            return response()->json(['message' => 'No products found'], 404);
-        }
+        // if ($products->isEmpty()) {
+        //     return response()->json(['message' => 'No products found'], 404);
+        // }
 
         // Kembalikan hasil pencarian ke view atau dalam format JSON
         return view('products.index', ['products' => $products]);
