@@ -13,10 +13,10 @@ Route::get('/', function () {
 
 Route::prefix('/products')->controller(ProductController::class)->group(function () {
     Route::get('/', 'index')->name('products.list');
-    Route::get('/create', 'create')->name('products.form');
-    Route::get('/edit/{id}', 'edit')->name('products.edit');
-    Route::post('/store', 'store')->name('products.store');
-    Route::post('/update/{id}', 'update')->name('products.update');
+    Route::get('/create', 'create')->name('products.form')->middleware('can:is-admin');
+    Route::get('/edit/{id}', 'edit')->name('products.edit')->middleware('can:is-admin');
+    Route::post('/store', 'store')->name('products.store')->middleware('can:is-admin');
+    Route::post('/update/{id}', 'update')->name('products.update')->middleware('can:is-admin');
     Route::get('/show/{id}', 'show')->name('products.show');
     Route::get('/show/{id}/image1','image1')->name('products.image1');
     Route::get('/show/{id}/image2','image2')->name('products.image2');
@@ -25,7 +25,7 @@ Route::prefix('/products')->controller(ProductController::class)->group(function
     Route::get('/filter', 'fliter')->name('products.filter');
 });
 
-Route::prefix('/categories')->controller(CategoryController::class)->group(function() {
+Route::prefix('/categories')->controller(CategoryController::class)->middleware('can:is-admin')->group(function() {
 	Route::get('/', 'index')->name('categories.list');
 	Route::get('/create', 'create')->name('categories.create');
 	Route::post('/store', 'store')->name('categories.store');
