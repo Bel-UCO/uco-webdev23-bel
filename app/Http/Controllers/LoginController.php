@@ -9,7 +9,7 @@ class LoginController extends Controller
 {
     function index()
     {
-        return view('login.form', ['showFilters' => false]);
+        return view('login.form');
     }
 
     function store(Request $request)

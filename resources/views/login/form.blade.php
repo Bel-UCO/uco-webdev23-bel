@@ -1,4 +1,4 @@
-<x-template title="Log In" :showFilters="$showFilters">
+<x-template title="Log In">
     @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show rounded-0 mb-0" role="alert">
         {{ session('success') }}

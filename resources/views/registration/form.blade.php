@@ -1,4 +1,4 @@
-<x-template title="Registration" :showFilters="$showFilters">
+<x-template title="Registration">
     <div class="row justify-content-center py-3">
         <div class="col-md-7">
             <h1>Create new user</h1>
