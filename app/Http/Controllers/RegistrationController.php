@@ -11,7 +11,7 @@ class RegistrationController extends Controller
 {
     function index()
     {
-        return view('registration.form');
+        return view('registration.form', ['showFilters' => false]);
     }
 
     function store(Request $request)

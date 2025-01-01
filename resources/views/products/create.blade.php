@@ -1,4 +1,11 @@
 <x-template title="Create" :showFilters="$showFilters">
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="form-container">
         <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateInput()">
             @csrf

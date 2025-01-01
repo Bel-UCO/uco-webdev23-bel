@@ -63,7 +63,7 @@ class ProductController extends Controller
     {
         $categories = Category::getOrdered();
 
-        $showFilters = true;
+        $showFilters = false;
 
     // Mengirim data kategori ke view
         return view('products.create', compact('categories', 'showFilters'));
@@ -185,11 +185,15 @@ class ProductController extends Controller
         // Cek produk berdasarkan ID
         $product = Product::find($id);
 
-        $category = $product->category;
-
         // Pastikan produk ditemukan
         if (!$product) {
-            return redirect()->route('products.index')->with('error', 'Produk tidak ditemukan!');
+            return redirect()->route('products.list')->with('error', "There's no product with such ID.");
+        }
+
+        $category = $product->category;
+
+        if (!$category) {
+            return redirect()->route('products.list')->with('error', "There's no product with such ID.");
         }
 
         $showFilters = false;
@@ -201,10 +205,7 @@ class ProductController extends Controller
             'product' => $product,
             'category' => $category,
             'showFilters' => $showFilters
-        ])->with('debugData', compact('product', 'category', 'showFilters'));
-
-
-
+        ]);
     }
 
 
@@ -219,15 +220,16 @@ class ProductController extends Controller
         // Mengambil semua kategori untuk dropdown
         $categories = Category::getOrdered();
 
-        // Mengecek jika produk tidak ditemukan
         if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
+            return redirect()->route('products.form')->with('error', "There's no product with such ID.")
+    ->with('debug', session()->all());
         }
 
         // Mengirim data produk dan kategori ke view
         return view('products.edit', [
             'product' => $product,
-            'categories' => $categories
+            'categories' => $categories,
+            'showFilters' => false
         ]);
     }
 
@@ -334,7 +336,7 @@ class ProductController extends Controller
         // }
 
         // Kembalikan hasil pencarian ke view atau dalam format JSON
-        return view('products.index', ['products' => $products]);
+        return view('products.index', ['products' => $products, 'showFilters' => true]);
     }
 
 

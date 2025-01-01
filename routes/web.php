@@ -8,7 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RegistrationController;
 
 Route::get('/', function () {
-    return view('home');
+    return view('home', ['showFilters' => false]);
 })->name('home');
 
 Route::prefix('/products')->controller(ProductController::class)->group(function () {

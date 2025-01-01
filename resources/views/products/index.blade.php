@@ -1,4 +1,11 @@
 <x-template title='Home' :showFilters="$showFilters">
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="row" style="margin: 10pt 20pt 0pt 20pt">
         {{-- <div class="col-12 col-md-12 text-end mb-3">
             <button class="btn btn-secondary" type="button" onclick="window.location.href='{{ route('products.form') }}'">Create +</button>
