@@ -1,4 +1,4 @@
-<x-template title='Home'>
+<x-template title='Home' :showFilters="$showFilters">
     <div class="row" style="margin: 10pt 20pt 0pt 20pt">
         {{-- <div class="col-12 col-md-12 text-end mb-3">
             <button class="btn btn-secondary" type="button" onclick="window.location.href='{{ route('products.form') }}'">Create +</button>

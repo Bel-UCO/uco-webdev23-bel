@@ -36,6 +36,7 @@ class ProductsTableSeeder extends Seeder
                 'subcategory' => ['SHOES', 'SHIRT', 'T-SHIRT', 'SHORTS'][rand(0, 3)],  // Subkategori acak
                 'price' => rand(500000, 3000000),  // Harga produk acak
                 'discount' => rand(0, 50),  // Diskon acak
+                'stock' => 200,
                 'image1' => $image1,  // Gambar pertama sebagai binary
                 'image2' => $image2,  // Gambar kedua sebagai binary
                 'image3' => $image3,  // Gambar ketiga sebagai binary

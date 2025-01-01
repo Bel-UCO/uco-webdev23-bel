@@ -1,4 +1,4 @@
-<x-template title="{{ $product->subCategory . ' ' . $product->name }}">
+<x-template title="{{ $product->subCategory . ' ' . $product->name }}" :showFilters="$showFilters">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
     <div style="display: flex; flex-direction: row; justify-content: center;">
 

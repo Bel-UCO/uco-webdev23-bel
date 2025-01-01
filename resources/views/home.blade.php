@@ -1,4 +1,4 @@
-<x-template title="Home">
+<x-template title="Home" :showFilters="$showFilters">
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <!-- Newest Product Banner -->

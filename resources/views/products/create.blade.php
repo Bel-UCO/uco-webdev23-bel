@@ -1,4 +1,4 @@
-<x-template title="Create">
+<x-template title="Create" :showFilters="$showFilters">
     <div class="form-container">
         <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateInput()">
             @csrf

@@ -87,35 +87,39 @@
     </nav>
     <div class="container mt-6" style="display: flex; justify-content:end">
         <div class="row" style="display: flex; justify-content:right">
-            <!-- Sorting Filter -->
-            <div class="col-md-6">
-                <form method="GET" action="{{ route('products.list') }}" class="d-flex">
-                    <div class="form-group me-2">
-                        <select class="form-select" id="sort_by" name="sort_by">
-                            <option value="name_asc" @if(request('sort_by') == 'name_asc') selected @endif>Name Ascending</option>
-                            <option value="name_desc" @if(request('sort_by') == 'name_desc') selected @endif>Name Descending</option>
-                            <option value="price_asc" @if(request('sort_by') == 'price_asc') selected @endif>Price Low to High</option>
-                            <option value="price_desc" @if(request('sort_by') == 'price_desc') selected @endif>Price High to Low</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-secondary">Apply</button>
-                </form>
-            </div>
+            <!-- Filter akan ditampilkan hanya jika $showFilters bernilai true -->
+            @if($showFilters ?? false)
+                <!-- Sorting Filter -->
+                <div class="col-md-6">
+                    <form method="GET" action="{{ route('products.list') }}" class="d-flex">
+                        <div class="form-group me-2">
+                            <select class="form-select" id="sort_by" name="sort_by">
+                                <option value="name_asc" @if(request('sort_by') == 'name_asc') selected @endif>Name Ascending</option>
+                                <option value="name_desc" @if(request('sort_by') == 'name_desc') selected @endif>Name Descending</option>
+                                <option value="price_asc" @if(request('sort_by') == 'price_asc') selected @endif>Price Low to High</option>
+                                <option value="price_desc" @if(request('sort_by') == 'price_desc') selected @endif>Price High to Low</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Apply</button>
+                    </form>
+                </div>
 
-            <!-- Price Range Filter -->
-            <div class="col-md-6">
-                <form method="GET" action="{{ route('products.list') }}" class="d-flex">
-                    <div class="form-group me-2">
-                        <input type="number" class="form-control" id="min_price" name="min_price" placeholder="Min Price" value="{{ request('min_price') }}">
-                    </div>
-                    <div class="form-group me-2">
-                        <input type="number" class="form-control" id="max_price" name="max_price" placeholder="Max Price" value="{{ request('max_price') }}">
-                    </div>
-                    <button type="submit" class="btn btn-secondary">Apply</button>
-                </form>
-            </div>
+                <!-- Price Range Filter -->
+                <div class="col-md-6">
+                    <form method="GET" action="{{ route('products.list') }}" class="d-flex">
+                        <div class="form-group me-2">
+                            <input type="number" class="form-control" id="min_price" name="min_price" placeholder="Min Price" value="{{ request('min_price') }}">
+                        </div>
+                        <div class="form-group me-2">
+                            <input type="number" class="form-control" id="max_price" name="max_price" placeholder="Max Price" value="{{ request('max_price') }}">
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Apply</button>
+                    </form>
+                </div>
+            @endif
         </div>
     </div>
+
     <!-- Placeholder Konten -->
     <main class="container mt-4">
         {{ $slot }}

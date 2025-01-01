@@ -1,4 +1,4 @@
-<x-template title="Edit">
+<x-template title="Edit" :showFilters="$showFilters">
     <div class="form-container">
         <form action="{{ route('products.update', ['id' => $product->id]) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateInput()">
             @csrf

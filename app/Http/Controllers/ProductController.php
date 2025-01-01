@@ -50,8 +50,10 @@ class ProductController extends Controller
             }
         }
 
+        $showFilters = true; // Filter akan ditampilkan di halaman produk
+
         // Kirim data ke view
-        return view('products.index', compact('products'));
+        return view('products.index', compact('products', 'showFilters'));
     }
 
     /**
@@ -61,8 +63,10 @@ class ProductController extends Controller
     {
         $categories = Category::getOrdered();
 
+        $showFilters = true;
+
     // Mengirim data kategori ke view
-        return view('products.create', compact('categories'));
+        return view('products.create', compact('categories', 'showFilters'));
     }
 
     /**
@@ -188,8 +192,19 @@ class ProductController extends Controller
             return redirect()->route('products.index')->with('error', 'Produk tidak ditemukan!');
         }
 
+        $showFilters = false;
+
         // Kirimkan data produk ke view
-        return view('products.show', ['product' => $product, 'category'=> $category]);
+        // dd($showFilters);
+        // return view('products.show', ['product' => $product, 'category'=> $category, 'showFilters' => $showFilters]);
+        return view('products.show', [
+            'product' => $product,
+            'category' => $category,
+            'showFilters' => $showFilters
+        ])->with('debugData', compact('product', 'category', 'showFilters'));
+
+
+
     }
 
 

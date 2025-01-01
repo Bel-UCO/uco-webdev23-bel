@@ -25,4 +25,12 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+     /**
+     * Relasi ke tabel carts (satu produk bisa ada di banyak cart).
+     */
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
 }
