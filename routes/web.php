@@ -48,11 +48,9 @@ Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth')-
 
 Route::prefix('/cart')->controller(CartController::class)->middleware('auth')->group(function() {
     Route::get('/', 'index')->name('cart.list');
-    Route::post('/checkout', 'checkout')->name('cart.checkout');
+    Route::get('/checkout', 'checkout')->name('cart.checkout');
     Route::post('/update', 'update')->name('cart.update');
     Route::post('/delete',  'destroy')->name('cart.delete');
+    Route::get('/payment', 'payment')->name('cart.payment');
 });
 
-Route::post('/test', function (Request $request) {
-    dd($request->all());
-})->name('test');

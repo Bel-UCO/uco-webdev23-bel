@@ -18,28 +18,66 @@ class CartController extends Controller
 
     public function update(Request $request)
     {
-
-        dd($request->all());
-
         $request->validate([
-            'id' => 'required|exists:carts,id',
-            'quantity' => 'required|integer|min:0', // Izinkan 0 untuk menghapus
+            'items' => 'nullable|array',
+            'quantity' => 'nullable|array',
+            'action' => 'nullable|string',
         ]);
 
-        $cartItem = Cart::findOrFail($request->id);
+        // Tangani aksi berdasarkan tombol yang diklik
+        if ($request->has('action')) {
+            $action = $request->input('action');
 
-        if ($request->quantity == 0) {
-            // Hapus jika quantity = 0
-            $cartItem->delete();
+            if ($action === 'checkout') {
+                // Lanjutkan ke checkout
+                $selectedItems = $request->input('items', []);
+                if (empty($selectedItems)) {
+                    return redirect()->route('cart.list')->with('error', 'Please select items to checkout.');
+                }
 
-            return redirect()->route('cart.list')->with('success', 'Item removed from cart.');
+                $cartItems = Cart::whereIn('id', $selectedItems)->get();
+
+                // Simpan data ke session
+                session(['checkoutItems' => $cartItems]);
+
+                // Redirect ke halaman checkout
+                return redirect()->route('cart.checkout');
+            }
+
+
+            // Tangani aksi lain (increment, decrement, delete)
+            [$actionType, $itemId] = explode('-', $action);
+
+            $cartItem = Cart::findOrFail($itemId);
+
+            if ($actionType === 'decrement') {
+                // Kurangi quantity
+                $cartItem->quantity = max(1, $cartItem->quantity - 1);
+                $cartItem->save();
+            } elseif ($actionType === 'increment') {
+                // Tambah quantity
+                $cartItem->quantity += 1;
+                $cartItem->save();
+            } elseif ($actionType === 'delete') {
+                // Hapus item
+                $cartItem->delete();
+            }
+
+            return redirect()->route('cart.list')->with('success', 'Cart updated successfully.');
         }
 
-        $cartItem->quantity = $request->quantity;
-        $cartItem->save();
+        // Tangani perubahan quantity manual
+        if ($request->has('quantity')) {
+            foreach ($request->input('quantity') as $itemId => $quantity) {
+                $cartItem = Cart::findOrFail($itemId);
+                $cartItem->quantity = max(1, intval($quantity));
+                $cartItem->save();
+            }
+        }
 
-        return redirect()->route('cart.list')->with('success', 'Quantity updated successfully.');
+        return redirect()->route('cart.list')->with('success', 'Cart updated successfully.');
     }
+
 
 
 
@@ -58,19 +96,19 @@ class CartController extends Controller
         return view('cart.list', compact('cartItems'));
     }
 
-    public function checkout(Request $request)
+    public function checkout()
     {
-        $request->validate([
-            'items' => 'required|array',
-            'items.*' => 'exists:carts,id',
-        ]);
+        // Ambil data dari session
+        $checkoutItems = session('checkoutItems', collect()); // Default ke koleksi kosong jika tidak ada
 
-        $userId = Auth::id();
-        $cartItems = Cart::whereIn('id', $request->items)->where('user_id', $userId)->get();
+        if ($checkoutItems->isEmpty()) {
+            return redirect()->route('cart.list')->with('error', 'No items to checkout.');
+        }
 
-        // Lakukan proses checkout
-        return view('cart.checkout', compact('cartItems'));
+        // Render halaman checkout
+        return view('cart.checkout', compact('checkoutItems'));
     }
+
 
 
 };

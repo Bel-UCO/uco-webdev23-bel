@@ -4,11 +4,11 @@
     </div>
     @if ($cartItems->isEmpty())
         <div style="display:flex; align-items:center; justify-content:center; height:400px">
-            <p>Add product to your cart.</p>
+            <p>Your cart is empty. Add some products!</p>
         </div>
     @else
-        <!-- Form untuk checklist dan checkout -->
-        <form method="POST" action="{{ route('cart.checkout') }}" id="checkout-form">
+        <!-- Form untuk Semua Aksi -->
+        <form method="POST" action="{{ route('cart.update') }}" id="cart-form">
             @csrf
 
             <!-- Checklist All -->
@@ -18,68 +18,54 @@
 
             <!-- Cart Table -->
             <div style="overflow-x: auto;">
-                <table class="table table-fixed" id="cart-table" style="width: 100%; table-layout: fixed;">
+                <table class="table custom-table" id="cart-table">
                     <thead>
                         <tr>
                             <th style="width: 10%;">Check</th>
                             <th style="width: 40%;">Product</th>
                             <th style="width: 20%;">Price</th>
-                            <th style="width: 30%;">Quantity</th>
+                            <th style="width: 20%;">Quantity</th>
+                            <th style="width: 10%;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($cartItems as $item)
-                            <tr data-id="{{ $item->id }}" data-price="{{ $item->product->price }}">
-                                <td>
+                            @php
+                                $priceAfterDiscount = $item->product->price - ($item->product->price * $item->product->discount / 100);
+                            @endphp
+                            <tr data-id="{{ $item->id }}" data-price="{{ $priceAfterDiscount }}">
+                                <!-- Checklist -->
+                                <td class="align-middle text-center">
                                     <input type="checkbox" name="items[]" value="{{ $item->id }}" class="check-item">
                                 </td>
-                                <td>
-                                    <a href="{{ route('products.show', $item->product->id) }}" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-                                        <img src="data:image/jpeg;base64,{{ base64_encode($item->product->image1) }}" alt="Product Image" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
-                                        <span>{{ $item->product->name }}</span>
+
+                                <!-- Product Name and Image -->
+                                <td class="align-middle">
+                                    <a href="{{ route('products.show', $item->product->id) }}" class="product-link d-flex align-items-center">
+                                        <img src="data:image/jpeg;base64,{{ base64_encode($item->product->image1) }}" alt="Product Image" class="product-image me-2">
+                                        <span>{{ $item->product->name }} {{ $item->product->subcategory }}</span>
                                     </a>
                                 </td>
-                                <td>
-                                    <p class="price" data-original-price="{{ $item->product->price }}">
-                                        Rp {{ number_format($item->product->price * $item->quantity, 0, '.', '.') }}
+
+                                <!-- Price -->
+                                <td class="align-middle text-center">
+                                    <p class="price mb-0">
+                                        Rp {{ number_format($priceAfterDiscount * $item->quantity, 0, '.', '.') }}
                                     </p>
                                 </td>
-                                <td style="display: flex; align-items: center;">
-                                    <!-- Tombol Minus -->
 
+                                <!-- Quantity -->
+                                <td class="align-middle">
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        <button type="submit" name="action" value="decrement-{{ $item->id }}" class="btn btn-secondary btn-sm quantity-btn" {{ $item->quantity == 1 ? 'disabled' : '' }}>-</button>
+                                        <input type="number" name="quantity[{{ $item->id }}]" value="{{ $item->quantity }}" min="1" class="form-control form-control-sm quantity-input text-center" style="width: 60px;">
+                                        <button type="submit" name="action" value="increment-{{ $item->id }}" class="btn btn-secondary btn-sm quantity-btn">+</button>
+                                    </div>
+                                </td>
 
-
-                                    <form action="{{ route('cart.update') }}" method="POST" style="margin-right: 5px;" onsubmit="console.log('Form Submitted'); return true;">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $item->id }}">
-                                        <input type="hidden" name="quantity" value="{{ $item->quantity - 1 }}">
-                                        <button type="submit" class="btn btn-secondary decrement-btn">-</button>
-                                    </form>
-
-
-
-
-                                    <!-- Input Manual Quantity -->
-                                    <form action="{{ route('cart.update') }}" method="POST" style="margin: 0 10px;">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $item->id }}">
-                                        <input type="number" name="quantity" class="form-control update-quantity" value="{{ $item->quantity }}" min="1" style="width: 60px; text-align: center;" onchange="this.form.submit()">
-                                    </form>
-
-                                    <!-- Tombol Plus -->
-                                    <form action="{{ route('cart.update') }}" method="POST" style="margin-right: 5px;">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $item->id }}">
-                                        <input type="hidden" name="quantity" value="{{ $item->quantity + 1 }}">
-                                        <button type="submit" class="btn btn-secondary increment-btn">+</button>
-                                    </form>
-
-                                    <!-- Tombol Delete -->
-                                    <form action="{{ route('cart.delete') }}" method="POST" style="margin-left: 10px;">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $item->id }}">
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
+                                <!-- Actions -->
+                                <td class="align-middle text-center">
+                                    <button type="submit" name="action" value="delete-{{ $item->id }}" class="btn btn-danger btn-sm">Delete</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -88,12 +74,110 @@
             </div>
 
             <!-- Subtotal -->
-            <div class="mt-4">
-                <h3 id="subtotal">Subtotal: Rp 0</h3>
+            <div class="d-flex align-items-center justify-content-between mt-4">
+                <!-- Subtotal -->
+                <h3 id="subtotal" class="mb-0">Subtotal: Rp 0</h3>
+
+                <!-- Button Checkout -->
+                <button type="submit" name="action" value="checkout" class="btn btn-primary">Proceed to Checkout</button>
             </div>
 
-            <!-- Button Checkout -->
-            <button type="submit" class="btn btn-primary mt-3">Proceed to Checkout</button>
         </form>
     @endif
+
+    <style>
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .custom-table th, .custom-table td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 10px;
+            height: 70px; /* Tinggi tetap */
+        }
+
+        .custom-table tbody tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .product-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .product-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .quantity-cell {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-sm {
+            font-size: 0.875rem;
+        }
+    </style>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkAll = document.getElementById('check-all');
+            const checkItems = document.querySelectorAll('.check-item');
+            const subtotalElement = document.getElementById('subtotal');
+
+            function formatRupiah(number) {
+                return 'Rp ' + number.toLocaleString('id-ID', { useGrouping: true }).replace(/,/g, '.');
+            }
+
+            function calculateSubtotal() {
+                let subtotal = 0;
+                checkItems.forEach(item => {
+                    if (item.checked) {
+                        const row = item.closest('tr');
+                        const price = parseInt(row.dataset.price, 10);
+                        const quantity = parseInt(row.querySelector('.quantity-input').value, 10);
+                        subtotal += price * quantity;
+                    }
+                });
+                subtotalElement.textContent = `Subtotal: ${formatRupiah(subtotal)}`;
+            }
+
+            checkAll.addEventListener('change', function () {
+                checkItems.forEach(item => {
+                    item.checked = this.checked;
+                });
+                calculateSubtotal();
+            });
+
+            checkItems.forEach(item => {
+                item.addEventListener('change', calculateSubtotal);
+            });
+
+            calculateSubtotal();
+        });
+    </script>
 </x-template>
