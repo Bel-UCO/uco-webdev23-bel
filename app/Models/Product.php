@@ -33,4 +33,10 @@ class Product extends Model
         return $this->hasMany(Cart::class);
     }
 
+    public function checkoutLists()
+    {
+        return $this->hasMany(CheckoutList::class, 'product_id');
+    }
+
+
 }

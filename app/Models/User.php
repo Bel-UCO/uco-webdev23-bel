@@ -60,4 +60,11 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(Product::class, Cart::class, 'user_id', 'id', 'id', 'product_id');
     }
+
+    public function checkouts()
+    {
+        return $this->hasMany(Checkout::class, 'user_id');
+    }
+
+
 }
