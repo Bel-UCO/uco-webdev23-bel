@@ -58,7 +58,15 @@
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center justify-content-center gap-2">
                                         <button type="submit" name="action" value="decrement-{{ $item->id }}" class="btn btn-secondary btn-sm quantity-btn" {{ $item->quantity == 1 ? 'disabled' : '' }}>-</button>
-                                        <input type="number" name="quantity[{{ $item->id }}]" value="{{ $item->quantity }}" min="1" class="form-control form-control-sm quantity-input text-center" style="width: 60px;">
+                                        <input
+                                            type="number"
+                                            name="quantity[{{ $item->id }}]"
+                                            value="{{ $item->quantity }}"
+                                            min="1"
+                                            class="form-control form-control-sm quantity-input text-center"
+                                            style="width: 60px;"
+                                            data-id="{{ $item->id }}"
+                                            onchange="updateQuantity(this)">
                                         <button type="submit" name="action" value="increment-{{ $item->id }}" class="btn btn-secondary btn-sm quantity-btn">+</button>
                                     </div>
                                 </td>
@@ -144,6 +152,43 @@
 
 
     <script>
+        function updateQuantity(inputElement) {
+            const cartItemId = inputElement.dataset.id; // ID dari item cart
+            const quantity = inputElement.value; // Nilai kuantitas
+            const actionUrl = "{{ route('cart.update') }}"; // URL untuk update cart
+
+            // Validasi input agar tidak kurang dari 1
+            if (quantity < 1) {
+                alert('Quantity must be at least 1.');
+                inputElement.value = 1; // Reset ke 1
+                return;
+            }
+
+            // Kirim request menggunakan Fetch API
+            fetch(actionUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    quantity: { [cartItemId]: quantity } // Format data quantity sesuai kebutuhan controller
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Quantity updated successfully.');
+                    // Anda bisa menambahkan logika untuk memperbarui subtotal atau UI lainnya
+                } else {
+                    alert(data.message || 'Failed to update cart.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             const checkAll = document.getElementById('check-all');
             const checkItems = document.querySelectorAll('.check-item');

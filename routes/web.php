@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RegistrationController;
 
 Route::get('/', function () {
@@ -49,8 +50,12 @@ Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth')-
 Route::prefix('/cart')->controller(CartController::class)->middleware('auth')->group(function() {
     Route::get('/', 'index')->name('cart.list');
     Route::get('/checkout', 'checkout')->name('cart.checkout');
+    Route::post('/add', 'add')->name('cart.add');
     Route::post('/update', 'update')->name('cart.update');
     Route::post('/delete',  'destroy')->name('cart.delete');
-    Route::get('/payment', 'payment')->name('cart.payment');
+    Route::post('/payment', 'payment')->name('cart.payment');
+    Route::view('/succeed', 'cart.succeed')->name('cart.succeed');
 });
+
+Route::get('/purchase/history', [PurchaseController::class, 'history'])->middleware('auth')->name('purchase.history');
 

@@ -68,7 +68,7 @@
 
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li><a class="dropdown-item" href="#">Purchase history</a></li>
+                            <li><a class="dropdown-item" href="{{ route('purchase.history') }}">Purchase history</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
