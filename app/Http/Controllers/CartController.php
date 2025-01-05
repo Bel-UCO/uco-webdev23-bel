@@ -120,6 +120,8 @@ class CartController extends Controller
     }
 
 
+
+
     public function destroy(Request $request)
     {
         $request->validate([
