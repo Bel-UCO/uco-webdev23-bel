@@ -40,7 +40,7 @@
                                         $itemTotal = $priceAfterDiscount * $item->quantity;
                                     @endphp
                                     <tr>
-                                        <td>{{ $item->product->name }}</td>
+                                        <td>{{ $item->product->name }} {{ $item->product->subcategory }}</td>
                                         <td>Rp {{ number_format($priceAfterDiscount, 0, '.', '.') }}</td>
                                         <td>{{ $item->quantity }}</td>
                                         <td>Rp {{ number_format($itemTotal, 0, '.', '.') }}</td>
