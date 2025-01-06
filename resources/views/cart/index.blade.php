@@ -49,7 +49,7 @@
 
                                 <!-- Price -->
                                 <td class="align-middle text-center">
-                                    <p class="price mb-0">
+                                    <p class="price mb-0" id="price-{{$item->id}}">
                                         Rp {{ number_format($priceAfterDiscount * $item->quantity, 0, '.', '.') }}
                                     </p>
                                 </td>
@@ -57,7 +57,7 @@
                                 <!-- Quantity -->
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center justify-content-center gap-2">
-                                        <button type="submit" name="action" value="decrement-{{ $item->id }}" class="btn btn-secondary btn-sm quantity-btn" {{ $item->quantity == 1 ? 'disabled' : '' }}>-</button>
+                                        <button type="button" onclick="decrementQuantity({{ $item->id }}, this, {{$item->normal_price}})" value="decrement-{{ $item->id }}" class="btn btn-secondary btn-sm quantity-btn"  {{ $item->quantity == 1 ? 'disabled' : '' }}>-</button>
                                         <input
                                             type="number"
                                             name="quantity[{{ $item->id }}]"
@@ -66,8 +66,8 @@
                                             class="form-control form-control-sm quantity-input text-center"
                                             style="width: 60px;"
                                             data-id="{{ $item->id }}"
-                                            onchange="updateQuantity(this)">
-                                        <button type="submit" name="action" value="increment-{{ $item->id }}" class="btn btn-secondary btn-sm quantity-btn">+</button>
+                                            onchange="updateQuantity(this, {{$item->normal_price}})">
+                                        <button type="button" onclick="incrementQuantity({{ $item->id }}, this, {{$item->normal_price}})" value="increment-{{ $item->id }}" class="btn btn-secondary btn-sm quantity-btn" >+</button>
                                     </div>
                                 </td>
 
@@ -152,10 +152,12 @@
 
 
     <script>
-        function updateQuantity(inputElement) {
+        function updateQuantity(inputElement, normalPrice) {
+            console.log(normalPrice);
             const cartItemId = inputElement.dataset.id; // ID dari item cart
             const quantity = inputElement.value; // Nilai kuantitas
             const actionUrl = "{{ route('cart.update') }}"; // URL untuk update cart
+            const csrfToken = "{{ csrf_token() }}";
 
             // Validasi input agar tidak kurang dari 1
             if (quantity < 1) {
@@ -169,7 +171,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    'X-CSRF-TOKEN': csrfToken,
                 },
                 body: JSON.stringify({
                     quantity: { [cartItemId]: quantity } // Format data quantity sesuai kebutuhan controller
@@ -179,6 +181,8 @@
             .then(data => {
                 if (data.success) {
                     console.log('Quantity updated successfully.');
+                    updatePrice(cartItemId, normalPrice, inputElement);
+
                     // Anda bisa menambahkan logika untuk memperbarui subtotal atau UI lainnya
                 } else {
                     alert(data.message || 'Failed to update cart.');
@@ -224,5 +228,106 @@
 
             calculateSubtotal();
         });
+
+        function decrementQuantity(cartItemId, buttonElement, normalPrice) {
+            console.log('decrement',normalPrice);
+            const inputElement = buttonElement.nextElementSibling; // The input element next to the button
+            const currentQuantity = parseInt(inputElement.value, 10);
+
+            if (currentQuantity > 1) {
+                const newQuantity = currentQuantity - 1;
+                inputElement.value = newQuantity;
+
+                // Call the updateQuantity function on the server
+                updateQuantityOnServer(cartItemId, newQuantity, currentQuantity, normalPrice);
+            } else {
+                buttonElement.disabled = true;
+            }
+        }
+
+    function incrementQuantity(cartItemId, buttonElement, normalPrice) {
+        console.log('increment',normalPrice);
+        const inputElement = buttonElement.previousElementSibling; // The input element before the button
+        const currentQuantity = parseInt(inputElement.value, 10);
+        const newQuantity = currentQuantity + 1;
+
+        inputElement.value = newQuantity;
+
+        // Re-enable the decrement button
+        buttonElement.previousElementSibling.previousElementSibling.disabled = false;
+
+
+        // Call the updateQuantity function on the server
+        updateQuantityOnServer(cartItemId, newQuantity, currentQuantity, normalPrice);
+
+    }
+
+    function updateQuantityOnServer(cartItemId, newQuantity, currentQuantity, normalPrice) {
+        const actionUrl = "{{ route('cart.updateQuantity') }}"; // Your Laravel route for updating the cart
+        const csrfToken = "{{ csrf_token() }}";
+         // Kirim request menggunakan Fetch API
+         fetch(actionUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: JSON.stringify({
+                    quantity: { [cartItemId]: newQuantity } // Format data quantity sesuai kebutuhan controller
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Quantity updated successfully.');
+                    updatePrice(cartItemId, normalPrice, newQuantity);
+                } else {
+                    alert(data.message || 'Failed to update cart.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function updatePrice(cartItemId, pricePerItem, quantity){
+
+        const priceElement = document.getElementById(`price-${cartItemId}`);
+        const subtotalElement = document.getElementById('subtotal');
+        const totalPrice = pricePerItem * quantity;
+
+        const formattedPrice = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(totalPrice);
+
+        console.log('afterUpdatePrice', formattedPrice);
+        calculateSubtotal(pricePerItem, quantity);
+        priceElement.textContent = formattedPrice;
+
+
+    }
+    function formatRupiah(number) {
+        return 'Rp ' + number.toLocaleString('id-ID', { useGrouping: true }).replace(/,/g, '.');
+    }
+
+    function calculateSubtotal(pricePerItem, quantity) {
+        const checkItems = document.querySelectorAll('.check-item');
+        const subtotalElement = document.getElementById('subtotal');
+        let subtotal = 0;
+        checkItems.forEach(item => {
+            if (item.checked) {
+                const row = item.closest('tr');
+                const price = parseInt(row.dataset.price, 10);
+                const quantity = parseInt(row.querySelector('.quantity-input').value, 10);
+                subtotal += pricePerItem * quantity;
+            }
+        });
+        const roundedSubtotal = Math.round(subtotal);
+
+        subtotalElement.textContent = `Subtotal: ${formatRupiah(roundedSubtotal)}`;
+    }
     </script>
 </x-template>

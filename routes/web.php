@@ -55,6 +55,7 @@ Route::prefix('/cart')->controller(CartController::class)->middleware('auth')->g
     Route::post('/delete',  'destroy')->name('cart.delete');
     Route::post('/payment', 'payment')->name('cart.payment');
     Route::view('/succeed', 'cart.succeed')->name('cart.succeed');
+    Route::post('/update-quantity', 'updateQuantitywithButton')->name('cart.updateQuantity');
 });
 
 Route::get('/purchase/history', [PurchaseController::class, 'history'])->middleware('auth')->name('purchase.history');

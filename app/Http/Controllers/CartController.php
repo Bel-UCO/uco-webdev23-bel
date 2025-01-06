@@ -14,7 +14,9 @@ class CartController extends Controller
     public function index() {
         $userId = Auth::id();
         $cartItems = Cart::where('user_id', $userId)->with('product')->get();
-
+        $cartItems->each(function ($cartItem) {
+            $cartItem->normal_price = $cartItem->product->price - (($cartItem->product->discount / 100) * $cartItem->product->price );
+        });
         return view('cart.index', compact('cartItems'));
     }
 
@@ -196,7 +198,32 @@ class CartController extends Controller
         return redirect()->route('cart.succeed')->with('success', 'Checkout completed. Proceed to payment.');
     }
 
+    public function updateQuantitywithButton(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'quantity' => 'required|array',
+                'quantity.*' => 'required|integer|min:1',
+            ]);
 
+            foreach ($validated['quantity'] as $itemId => $quantity) {
+                $cartItem = Cart::find($itemId);
+                if ($cartItem) {
+                    $cartItem->quantity = $quantity;
+                    $cartItem->save();
+                }
+            }
 
+            return response()->json([
+                'success' => true,
+                'message' => 'Cart updated successfully.',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update cart.',
+            ], 500);
+        }
+    }
 
 };
