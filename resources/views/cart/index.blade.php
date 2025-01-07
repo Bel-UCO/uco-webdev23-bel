@@ -9,17 +9,17 @@
         </div>
     @else
         <!-- Form untuk Semua Aksi -->
-        <form method="POST" action="{{ route('cart.update') }}" id="cart-form">
+        <form action="{{ route('cart.update') }}" id="cart-form" method="POST">
             @csrf
 
             <!-- Checklist All -->
             <div class="mb-3">
-                <input type="checkbox" id="check-all"> Select All
+                <input id="check-all" type="checkbox"> Select All
             </div>
 
             <!-- Cart Table -->
             <div style="overflow-x: auto;">
-                <table class="table custom-table" id="cart-table">
+                <table class="custom-table table" id="cart-table">
                     <thead>
                         <tr>
                             <th style="width: 10%;">Check</th>
@@ -30,27 +30,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($cartItems as $item)
+                        @foreach ($cartItems as $item)
                             @php
-                                $priceAfterDiscount = $item->product->price - ($item->product->price * $item->product->discount / 100);
+                                $priceAfterDiscount = $item->product->price - ($item->product->price * $item->product->discount) / 100;
                             @endphp
                             <tr data-id="{{ $item->id }}" data-price="{{ $priceAfterDiscount }}">
                                 <!-- Checklist -->
-                                <td class="align-middle text-center">
-                                    <input type="checkbox" name="items[]" value="{{ $item->id }}" class="check-item">
+                                <td class="text-center align-middle">
+                                    <input class="check-item" name="items[]" type="checkbox" value="{{ $item->id }}">
                                 </td>
 
                                 <!-- Product Name and Image -->
                                 <td class="align-middle">
-                                    <a href="{{ route('products.show', $item->product->id) }}" class="product-link d-flex align-items-center">
-                                        <img src="data:image/jpeg;base64,{{ base64_encode($item->product->image1) }}" alt="Product Image" class="product-image me-2">
+                                    <a class="product-link d-flex align-items-center" href="{{ route('products.show', $item->product->id) }}">
+                                        <img alt="Product Image" class="product-image me-2" src="data:image/jpeg;base64,{{ base64_encode($item->product->image1) }}">
                                         <span>{{ $item->product->name }} {{ $item->product->subcategory }}</span>
                                     </a>
                                 </td>
 
                                 <!-- Price -->
-                                <td class="align-middle text-center">
-                                    <p class="price mb-0" id="price-{{$item->id}}">
+                                <td class="text-center align-middle">
+                                    <p class="price mb-0" id="price-{{ $item->id }}">
                                         Rp {{ number_format($priceAfterDiscount * $item->quantity, 0, '.', '.') }}
                                     </p>
                                 </td>
@@ -58,23 +58,19 @@
                                 <!-- Quantity -->
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center justify-content-center gap-2">
-                                        <button type="button" onclick="decrementQuantity({{ $item->id }}, this, {{$item->normal_price}})" value="decrement-{{ $item->id }}" class="btn btn-secondary btn-sm quantity-btn"  {{ $item->quantity == 1 ? 'disabled' : '' }}>-</button>
+                                        <button {{ $item->quantity == 1 ? 'disabled' : '' }} class="btn btn-secondary btn-sm quantity-btn" onclick="decrementQuantity({{ $item->id }}, this, {{ $item->normal_price }})" type="button"
+                                            value="decrement-{{ $item->id }}">-</button>
                                         <input
-                                            type="number"
-                                            name="quantity[{{ $item->id }}]"
-                                            value="{{ $item->quantity }}"
-                                            min="1"
-                                            class="form-control form-control-sm quantity-input text-center"
-                                            style="width: 60px;"
-                                            data-id="{{ $item->id }}"
-                                            onchange="updateQuantity(this, {{$item->normal_price}})">
-                                        <button type="button" onclick="incrementQuantity({{ $item->id }}, this, {{$item->normal_price}})" value="increment-{{ $item->id }}" class="btn btn-secondary btn-sm quantity-btn" >+</button>
+                                            class="form-control form-control-sm quantity-input text-center" data-id="{{ $item->id }}" min="1" name="quantity[{{ $item->id }}]"
+                                            onchange="updateQuantity(this, {{ $item->normal_price }})" style="width: 60px;" type="number" value="{{ $item->quantity }}">
+                                        <button class="btn btn-secondary btn-sm quantity-btn" onclick="incrementQuantity({{ $item->id }}, this, {{ $item->normal_price }})" type="button"
+                                            value="increment-{{ $item->id }}">+</button>
                                     </div>
                                 </td>
 
                                 <!-- Actions -->
-                                <td class="align-middle text-center">
-                                    <button type="submit" name="action" value="delete-{{ $item->id }}" class="btn btn-danger btn-sm">Delete</button>
+                                <td class="text-center align-middle">
+                                    <button class="btn btn-danger btn-sm" name="action" type="submit" value="delete-{{ $item->id }}">Delete</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -85,10 +81,10 @@
             <!-- Subtotal -->
             <div class="d-flex align-items-center justify-content-between mt-4">
                 <!-- Subtotal -->
-                <h3 id="subtotal" class="mb-0">Subtotal: Rp 0</h3>
+                <h3 class="mb-0" id="subtotal">Subtotal: Rp 0</h3>
 
                 <!-- Button Checkout -->
-                <button type="submit" name="action" value="checkout" class="btn btn-primary">Proceed to Checkout</button>
+                <button class="btn btn-primary" name="action" type="submit" value="checkout">Proceed to Checkout</button>
             </div>
 
         </form>
@@ -100,11 +96,13 @@
             border-collapse: collapse;
         }
 
-        .custom-table th, .custom-table td {
+        .custom-table th,
+        .custom-table td {
             vertical-align: middle;
             text-align: center;
             padding: 10px;
-            height: 70px; /* Tinggi tetap */
+            height: 70px;
+            /* Tinggi tetap */
         }
 
         .custom-table tbody tr {
@@ -153,175 +151,155 @@
 
 
     <script>
-        function updateQuantity(inputElement, normalPrice) {
-            console.log(normalPrice);
+        const updateQuantity = (inputElement, normalPrice) => {
+            const cartItemId = inputElement.dataset.id;
+            const newQuantity = parseInt(inputElement.value);
 
-
-
-            const csrfToken = "{{ csrf_token() }}";
-
-            if (quantity < 1) {
+            if (newQuantity < 1) {
                 alert('Quantity must be at least 1.');
-
+                inputElement.value = 1;
                 return;
             }
 
-            fetch(actionUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-                body: JSON.stringify({
+            const decrementButton = inputElement.previousElementSibling;
+            decrementButton.disabled = newQuantity <= 1;
 
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('Quantity updated successfully.');
-                    updatePrice(cartItemId, normalPrice, inputElement);
+            updateQuantityOnServer(cartItemId, newQuantity, normalPrice);
+            updatePrice(cartItemId, normalPrice, newQuantity);
+        };
 
-                } else {
-                    alert(data.message || 'Failed to update cart.');
+        document.querySelectorAll('.quantity-input').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.blur();
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
             });
-        }
+        });
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', () => {
             const checkAll = document.getElementById('check-all');
             const checkItems = document.querySelectorAll('.check-item');
             const subtotalElement = document.getElementById('subtotal');
 
-            function formatRupiah(number) {
-                return 'Rp ' + number.toLocaleString('id-ID', { useGrouping: true }).replace(/,/g, '.');
-            }
+            const formatRupiah = number =>
+                `Rp ${number.toLocaleString('id-ID', { useGrouping: true }).replace(/,/g, '.')}`;
 
-            function calculateSubtotal() {
-                let subtotal = 0;
-                checkItems.forEach(item => {
+            const calculateSubtotal = () => {
+                const subtotal = [...checkItems].reduce((total, item) => {
                     if (item.checked) {
                         const row = item.closest('tr');
-                        const price = parseInt(row.dataset.price, 10);
-                        const quantity = parseInt(row.querySelector('.quantity-input').value, 10);
-                        subtotal += price * quantity;
+                        const price = parseFloat(row.dataset.price);
+                        const quantity = parseInt(row.querySelector('.quantity-input').value);
+                        return total + (price * quantity);
                     }
-                });
-                subtotalElement.textContent = `Subtotal: ${formatRupiah(subtotal)}`;
-            }
+                    return total;
+                }, 0);
 
-            checkAll.addEventListener('change', function () {
-                checkItems.forEach(item => {
-                    item.checked = this.checked;
-                });
+                subtotalElement.textContent = `Subtotal: ${formatRupiah(subtotal)}`;
+            };
+
+            checkAll.addEventListener('change', () => {
+                checkItems.forEach(item => item.checked = checkAll.checked);
                 calculateSubtotal();
             });
 
-            checkItems.forEach(item => {
-                item.addEventListener('change', calculateSubtotal);
-            });
+            checkItems.forEach(item =>
+                item.addEventListener('change', calculateSubtotal)
+            );
 
             calculateSubtotal();
         });
 
-    function decrementQuantity(cartItemId, buttonElement, normalPrice) {
-        const inputElement = buttonElement.nextElementSibling;
-        const currentQuantity = parseInt(inputElement.value, 10);
+        const decrementQuantity = (cartItemId, buttonElement, normalPrice) => {
+            const inputElement = buttonElement.nextElementSibling;
+            const currentQuantity = parseInt(inputElement.value);
 
-        if (currentQuantity > 1) {
-            const newQuantity = currentQuantity - 1;
+            if (currentQuantity > 1) {
+                const newQuantity = currentQuantity - 1;
+                inputElement.value = newQuantity;
+                buttonElement.disabled = newQuantity <= 1;
+
+                updateQuantityOnServer(cartItemId, newQuantity, normalPrice);
+                updatePrice(cartItemId, normalPrice, newQuantity);
+            }
+        };
+
+        const incrementQuantity = (cartItemId, buttonElement, normalPrice) => {
+            const inputElement = buttonElement.previousElementSibling;
+            const newQuantity = parseInt(inputElement.value) + 1;
+
             inputElement.value = newQuantity;
-
-            buttonElement.disabled = newQuantity <= 1;
+            inputElement.previousElementSibling.disabled = false;
 
             updateQuantityOnServer(cartItemId, newQuantity, normalPrice);
-
             updatePrice(cartItemId, normalPrice, newQuantity);
-        }
-    }
+        };
 
-    function incrementQuantity(cartItemId, buttonElement, normalPrice) {
-        const inputElement = buttonElement.previousElementSibling;
-        const currentQuantity = parseInt(inputElement.value, 10);
-        const newQuantity = currentQuantity + 1;
+        const updateQuantityOnServer = async (cartItemId, newQuantity, normalPrice) => {
+            const actionUrl = "{{ route('cart.updateQuantity') }}";
+            const csrfToken = "{{ csrf_token() }}";
 
-        inputElement.value = newQuantity;
+            try {
+                const response = await fetch(actionUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                    body: JSON.stringify({
+                        quantity: {
+                            [cartItemId]: newQuantity
+                        }
+                    })
+                });
 
-        const decrementButton = inputElement.previousElementSibling;
-        decrementButton.disabled = false;
+                const data = await response.json();
 
-        updateQuantityOnServer(cartItemId, newQuantity, normalPrice);
-
-        updatePrice(cartItemId, normalPrice, newQuantity);
-    }
-
-    function updateQuantityOnServer(cartItemId, newQuantity, normalPrice) {
-        const actionUrl = "{{ route('cart.updateQuantity') }}";
-        const csrfToken = "{{ csrf_token() }}";
-
-        fetch(actionUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken,
-            },
-            body: JSON.stringify({
-                quantity: { [cartItemId]: newQuantity }
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log('Quantity updated successfully.');
-            } else {
-                alert(data.message || 'Failed to update cart.');
+                if (!data.success) {
+                    throw new Error(data.message || 'Failed to update cart.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
                 const input = document.querySelector(`input[data-id="${cartItemId}"]`);
                 input.value = input.defaultValue;
+                alert(error.message);
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
+        };
 
-    function updatePrice(cartItemId, pricePerItem, quantity) {
-        const priceElement = document.getElementById(`price-${cartItemId}`);
-        const totalPrice = pricePerItem * quantity;
+        const updatePrice = (cartItemId, pricePerItem, quantity) => {
+            const priceElement = document.getElementById(`price-${cartItemId}`);
+            const totalPrice = pricePerItem * quantity;
 
-        const formattedPrice = new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
-        }).format(totalPrice);
+            const formattedPrice = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(totalPrice).replace('IDR', 'Rp');
 
-        priceElement.textContent = formattedPrice.replace('IDR', 'Rp');
+            priceElement.textContent = formattedPrice;
+            calculateSubtotal();
+        };
 
-        calculateSubtotal();
-    }
+        const calculateSubtotal = () => {
+            const checkItems = document.querySelectorAll('.check-item');
+            const subtotalElement = document.getElementById('subtotal');
 
-    function calculateSubtotal() {
-        const checkItems = document.querySelectorAll('.check-item');
-        const subtotalElement = document.getElementById('subtotal');
-        let subtotal = 0;
+            const subtotal = [...checkItems].reduce((total, item) => {
+                if (item.checked) {
+                    const row = item.closest('tr');
+                    const price = parseFloat(row.dataset.price);
+                    const quantity = parseInt(row.querySelector('.quantity-input').value);
+                    return total + (price * quantity);
+                }
+                return total;
+            }, 0);
 
-        checkItems.forEach(item => {
-            if (item.checked) {
-                const row = item.closest('tr');
-                const price = parseFloat(row.dataset.price);
-                const quantity = parseInt(row.querySelector('.quantity-input').value, 10);
-                subtotal += price * quantity;
-            }
-        });
+            subtotalElement.textContent = `Subtotal: ${formatRupiah(Math.round(subtotal))}`;
+        };
 
-        subtotalElement.textContent = `Subtotal: ${formatRupiah(Math.round(subtotal))}`;
-    }
-
-    function formatRupiah(number) {
-        return 'Rp ' + number.toLocaleString('id-ID', { useGrouping: true }).replace(/,/g, '.');
-    }
+        const formatRupiah = number =>
+            `Rp ${number.toLocaleString('id-ID', { useGrouping: true }).replace(/,/g, '.')}`;
     </script>
 </x-template>
