@@ -1,3 +1,4 @@
+
 <x-template title="Cart">
     <div>
         <h1>Cart</h1>
@@ -154,19 +155,17 @@
     <script>
         function updateQuantity(inputElement, normalPrice) {
             console.log(normalPrice);
-            const cartItemId = inputElement.dataset.id; // ID dari item cart
-            const quantity = inputElement.value; // Nilai kuantitas
-            const actionUrl = "{{ route('cart.update') }}"; // URL untuk update cart
+
+
+
             const csrfToken = "{{ csrf_token() }}";
 
-            // Validasi input agar tidak kurang dari 1
             if (quantity < 1) {
                 alert('Quantity must be at least 1.');
-                inputElement.value = 1; // Reset ke 1
+
                 return;
             }
 
-            // Kirim request menggunakan Fetch API
             fetch(actionUrl, {
                 method: 'POST',
                 headers: {
@@ -174,7 +173,7 @@
                     'X-CSRF-TOKEN': csrfToken,
                 },
                 body: JSON.stringify({
-                    quantity: { [cartItemId]: quantity } // Format data quantity sesuai kebutuhan controller
+
                 })
             })
             .then(response => response.json())
@@ -183,7 +182,6 @@
                     console.log('Quantity updated successfully.');
                     updatePrice(cartItemId, normalPrice, inputElement);
 
-                    // Anda bisa menambahkan logika untuk memperbarui subtotal atau UI lainnya
                 } else {
                     alert(data.message || 'Failed to update cart.');
                 }
@@ -229,71 +227,68 @@
             calculateSubtotal();
         });
 
-        function decrementQuantity(cartItemId, buttonElement, normalPrice) {
-            console.log('decrement',normalPrice);
-            const inputElement = buttonElement.nextElementSibling; // The input element next to the button
-            const currentQuantity = parseInt(inputElement.value, 10);
+    function decrementQuantity(cartItemId, buttonElement, normalPrice) {
+        const inputElement = buttonElement.nextElementSibling;
+        const currentQuantity = parseInt(inputElement.value, 10);
 
-            if (currentQuantity > 1) {
-                const newQuantity = currentQuantity - 1;
-                inputElement.value = newQuantity;
+        if (currentQuantity > 1) {
+            const newQuantity = currentQuantity - 1;
+            inputElement.value = newQuantity;
 
-                // Call the updateQuantity function on the server
-                updateQuantityOnServer(cartItemId, newQuantity, currentQuantity, normalPrice);
-            } else {
-                buttonElement.disabled = true;
-            }
+            buttonElement.disabled = newQuantity <= 1;
+
+            updateQuantityOnServer(cartItemId, newQuantity, normalPrice);
+
+            updatePrice(cartItemId, normalPrice, newQuantity);
         }
+    }
 
     function incrementQuantity(cartItemId, buttonElement, normalPrice) {
-        console.log('increment',normalPrice);
-        const inputElement = buttonElement.previousElementSibling; // The input element before the button
+        const inputElement = buttonElement.previousElementSibling;
         const currentQuantity = parseInt(inputElement.value, 10);
         const newQuantity = currentQuantity + 1;
 
         inputElement.value = newQuantity;
 
-        // Re-enable the decrement button
-        buttonElement.previousElementSibling.previousElementSibling.disabled = false;
+        const decrementButton = inputElement.previousElementSibling;
+        decrementButton.disabled = false;
 
+        updateQuantityOnServer(cartItemId, newQuantity, normalPrice);
 
-        // Call the updateQuantity function on the server
-        updateQuantityOnServer(cartItemId, newQuantity, currentQuantity, normalPrice);
-
+        updatePrice(cartItemId, normalPrice, newQuantity);
     }
 
-    function updateQuantityOnServer(cartItemId, newQuantity, currentQuantity, normalPrice) {
-        const actionUrl = "{{ route('cart.updateQuantity') }}"; // Your Laravel route for updating the cart
+    function updateQuantityOnServer(cartItemId, newQuantity, normalPrice) {
+        const actionUrl = "{{ route('cart.updateQuantity') }}";
         const csrfToken = "{{ csrf_token() }}";
-         // Kirim request menggunakan Fetch API
-         fetch(actionUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-                body: JSON.stringify({
-                    quantity: { [cartItemId]: newQuantity } // Format data quantity sesuai kebutuhan controller
-                })
+
+        fetch(actionUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+            },
+            body: JSON.stringify({
+                quantity: { [cartItemId]: newQuantity }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('Quantity updated successfully.');
-                    updatePrice(cartItemId, normalPrice, newQuantity);
-                } else {
-                    alert(data.message || 'Failed to update cart.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Quantity updated successfully.');
+            } else {
+                alert(data.message || 'Failed to update cart.');
+                const input = document.querySelector(`input[data-id="${cartItemId}"]`);
+                input.value = input.defaultValue;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
 
-    function updatePrice(cartItemId, pricePerItem, quantity){
-
+    function updatePrice(cartItemId, pricePerItem, quantity) {
         const priceElement = document.getElementById(`price-${cartItemId}`);
-        const subtotalElement = document.getElementById('subtotal');
         const totalPrice = pricePerItem * quantity;
 
         const formattedPrice = new Intl.NumberFormat('id-ID', {
@@ -303,31 +298,30 @@
             maximumFractionDigits: 0
         }).format(totalPrice);
 
-        console.log('afterUpdatePrice', formattedPrice);
-        calculateSubtotal(pricePerItem, quantity);
-        priceElement.textContent = formattedPrice;
+        priceElement.textContent = formattedPrice.replace('IDR', 'Rp');
 
-
-    }
-    function formatRupiah(number) {
-        return 'Rp ' + number.toLocaleString('id-ID', { useGrouping: true }).replace(/,/g, '.');
+        calculateSubtotal();
     }
 
-    function calculateSubtotal(pricePerItem, quantity) {
+    function calculateSubtotal() {
         const checkItems = document.querySelectorAll('.check-item');
         const subtotalElement = document.getElementById('subtotal');
         let subtotal = 0;
+
         checkItems.forEach(item => {
             if (item.checked) {
                 const row = item.closest('tr');
-                const price = parseInt(row.dataset.price, 10);
+                const price = parseFloat(row.dataset.price);
                 const quantity = parseInt(row.querySelector('.quantity-input').value, 10);
-                subtotal += pricePerItem * quantity;
+                subtotal += price * quantity;
             }
         });
-        const roundedSubtotal = Math.round(subtotal);
 
-        subtotalElement.textContent = `Subtotal: ${formatRupiah(roundedSubtotal)}`;
+        subtotalElement.textContent = `Subtotal: ${formatRupiah(Math.round(subtotal))}`;
+    }
+
+    function formatRupiah(number) {
+        return 'Rp ' + number.toLocaleString('id-ID', { useGrouping: true }).replace(/,/g, '.');
     }
     </script>
 </x-template>
