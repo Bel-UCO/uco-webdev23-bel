@@ -196,7 +196,7 @@
                     return total;
                 }, 0);
 
-                subtotalElement.textContent = `Subtotal: ${formatRupiah(subtotal)}`;
+                subtotalElement.textContent = `Subtotal: ${formatRupiah(Math.round(subtotal))}`;
             };
 
             checkAll.addEventListener('change', () => {
