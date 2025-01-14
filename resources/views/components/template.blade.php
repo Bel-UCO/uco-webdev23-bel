@@ -16,6 +16,8 @@
 
 </head>
 <body>
+
+
     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="display: flex; flex-direction:">
         <div class="container-fluid">
             <!-- Logo -->
@@ -35,12 +37,22 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{{ route('products.list') }}">All Products</a>
                     </li>
-                    @foreach(\App\Models\Category::getOrdered() as $category)
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ route('products.list', ['category' => $category->id]) }}">{{ $category->name }}</a>
-                </li>
 
+                    @cannot('is-admin')
+                    @foreach(\App\Models\Category::getOrdered() as $category)
+
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ route('products.list', ['category' => $category->id]) }}">{{ $category->name }}</a>
+                    </li>
                     @endforeach
+                    @endcannot
+
+                    <li class="nav-item">
+                        @can('is-admin')
+                            <a class="nav-link active" style="color:blue" aria-current="page" href="{{ route('admin.home') }}">ADMIN EDIT</a>
+                        @endcan
+                    </li>
+
                 </ul>
                 <!-- Form Pencarian -->
                 <form class="d-flex align-items-center" role="search" action="{{ route('products.search') }}" method="GET">
@@ -50,26 +62,34 @@
 
                 </form>
                 @auth
-                    <a href={{ route('cart.list') }}>
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                            width="25"
-                            height="25"
-                            fill="black"
-                            class="bi bi-cart"
-                            viewBox="0 0 20 20"
-                            style="margin-left: 10px;">
-                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                        </svg>
-                    </a>
+
+                @cannot('is-admin')
+                <a href={{ route('cart.list') }}>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        width="25"
+                        height="25"
+                        fill="black"
+                        class="bi bi-cart"
+                        viewBox="0 0 20 20"
+                        style="margin-left: 10px;">
+                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                    </svg>
+                </a>
+                @endcannot
+
                     <div class="dropdown">
                         <a class="btn dropdown-toggle border" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ auth()->user()->name }}
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-end">
+
+                            @cannot('is-admin')
                             <li><a class="dropdown-item" href="#">Profile</a></li>
                             <li><a class="dropdown-item" href="{{ route('purchase.history') }}">Purchase history</a></li>
                             <li><hr class="dropdown-divider"></li>
+                            @endcannot
+
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf

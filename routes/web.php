@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LoginController;
@@ -23,7 +24,7 @@ Route::prefix('/products')->controller(ProductController::class)->group(function
     Route::get('/show/{id}/image2','image2')->name('products.image2');
     Route::get('/show/{id}/image3','image3')->name('products.image3');
     Route::get('/search', 'search')->name('products.search');
-    Route::get('/filter', 'fliter')->name('products.filter');
+    Route::get('/filter', 'filter')->name('products.filter');
 });
 
 Route::prefix('/categories')->controller(CategoryController::class)->middleware('can:is-admin')->group(function() {
@@ -47,7 +48,7 @@ Route::prefix('/login')->controller(LoginController::class)->middleware('guest')
 
 Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
 
-Route::prefix('/cart')->controller(CartController::class)->middleware('auth')->group(function() {
+Route::prefix('/cart')->controller(CartController::class)->middleware('can:is-user')->group(function() {
     Route::get('/', 'index')->name('cart.list');
     Route::get('/checkout', 'checkout')->name('cart.checkout');
     Route::post('/add', 'add')->name('cart.add');
@@ -58,5 +59,8 @@ Route::prefix('/cart')->controller(CartController::class)->middleware('auth')->g
     Route::post('/update-quantity', 'updateQuantitywithButton')->name('cart.updateQuantity');
 });
 
-Route::get('/purchase/history', [PurchaseController::class, 'history'])->middleware('auth')->name('purchase.history');
+Route::get('/purchase/history', [PurchaseController::class, 'history'])->middleware('can:is-user')->name('purchase.history');
+
+Route::get('/admin', function(){
+    return view('admin.home', ['showFilters' => false]);})->middleware('can:is-admin')->name('admin.home');
 

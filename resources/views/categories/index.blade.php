@@ -1,4 +1,4 @@
-<x-template title="Categories" :showFilters="$showFilters">
+<x-template title="Categories" >
     <div class="container py-3">
         <h1>Categories</h1>
         <table class="table table-hover table-striped align-middle">

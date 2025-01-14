@@ -28,5 +28,10 @@ class AppServiceProvider extends ServiceProvider
 
         });
 
+        Gate::define('is-user', function(User $user) {
+            return $user->is_admin == 0 ? Response::allow() : Response::deny('Please Use User Account to Continue.');
+
+        });
+
     }
 }

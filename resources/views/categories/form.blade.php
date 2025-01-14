@@ -1,4 +1,4 @@
-<x-template title="Create" :showFilters="$showFilters">
+<x-template title="Create" >
     <div class="form-container">
         <form action="{{ isset($category->id) ? route('categories.update', ['id' => $category->id]) : route('categories.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateInput()">
             @csrf
