@@ -10,9 +10,13 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware) {
-        //
+    ->withMiddleware(function (\Illuminate\Foundation\Configuration\Middleware $middleware) {
+        $middleware->alias(['auth' => \Illuminate\Auth\Middleware\Authenticate::class]); // Middleware auth
+        $middleware->alias(['deny-admin' => \App\Http\Middleware\DenyAdminMiddleware::class]); // Middleware deny-admin
     })
+
+
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
+

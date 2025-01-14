@@ -27,11 +27,11 @@
                 </div>
 
                 <!-- Add Pagination -->
-                <div class="swiper-pagination"></div>
+                <div class="swiper-pagination text-white"></div>
 
                 <!-- Add Navigation -->
-                <div class="swiper-button-next" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%);"></div>
-                <div class="swiper-button-prev" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%);"></div>
+                <div class="swiper-button-next" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); color: rgba(255, 255, 255, 0.6);"></div>
+                <div class="swiper-button-prev" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); color: rgba(255, 255, 255, 0.6);"></div>
             </div>
         </div>
 
@@ -67,10 +67,16 @@
             <p>{{ $product->description}}</p>
             <br><br>
             <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
+
+                @can('is-admin')
                 <!-- Tombol Edit -->
-                {{-- <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary" style="width: 100%; text-align: center;">
+                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary" style="width: 100%; text-align: center;">
                     Edit
-                </a> --}}
+                </a>
+                @endcan
+
+
+                @cannot('is-admin')
                 <form method="POST" action="{{ route('cart.add') }}">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -81,6 +87,8 @@
                           </svg>  Add to Cart
                     </button>
                 </form>
+                @endcannot
+
             </div>
         </div>
     </div>

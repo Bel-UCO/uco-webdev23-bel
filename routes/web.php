@@ -48,7 +48,7 @@ Route::prefix('/login')->controller(LoginController::class)->middleware('guest')
 
 Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
 
-Route::prefix('/cart')->controller(CartController::class)->middleware('can:is-user')->group(function() {
+Route::prefix('/cart')->controller(CartController::class)->middleware(['auth', 'deny-admin'])->group(function() {
     Route::get('/', 'index')->name('cart.list');
     Route::get('/checkout', 'checkout')->name('cart.checkout');
     Route::post('/add', 'add')->name('cart.add');
@@ -59,7 +59,7 @@ Route::prefix('/cart')->controller(CartController::class)->middleware('can:is-us
     Route::post('/update-quantity', 'updateQuantitywithButton')->name('cart.updateQuantity');
 });
 
-Route::get('/purchase/history', [PurchaseController::class, 'history'])->middleware('can:is-user')->name('purchase.history');
+Route::get('/purchase/history', [PurchaseController::class, 'history'])->middleware(['auth', 'deny-admin'])->name('purchase.history');
 
 Route::get('/admin', function(){
     return view('admin.home', ['showFilters' => false]);})->middleware('can:is-admin')->name('admin.home');

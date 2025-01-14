@@ -1,4 +1,12 @@
 <x-template title="Home" :showFilters="$showFilters">
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
+
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <!-- Newest Product Banner -->

@@ -61,10 +61,16 @@
                                     @endif
                                 </p>
                             </div>
+
+                            @can('is-admin')
                             <!-- Button to Edit -->
-                            {{-- <div style="position: absolute; bottom: 10px; right: 10px;">
+                            <div style="position: absolute; bottom: 10px; right: 10px;">
                                 <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-primary">Edit</a>
-                            </div> --}}
+                            </div>
+                            @endcan
+
+                            @cannot('is-admin')
+
                             <div style="position:absolute; bottom:10px; right:10px">
                                 <form method="POST" action="{{ route('cart.add') }}">
                                     @csrf
@@ -76,8 +82,9 @@
                                           </svg>
                                     </button>
                                 </form>
-
                             </div>
+                            @endcannot
+
                         </div>
                     </a>
                 </div>
