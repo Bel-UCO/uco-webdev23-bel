@@ -65,12 +65,31 @@
             </p>
             <br>
             <p>{{ $product->description}}</p>
-            <br><br>
-            <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
+            <div style="display: flex; flex-direction: row; color: black; width: 100%; justify-content:end;">
+                <div>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank">
+                        <i class="fab fa-facebook fa-lg me-1" style="color: black"></i>
+                    </a>
+                </div>
+                <div>
+                    <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($product->name) }}" target="_blank">
+                        <i class="fa-brands fa-x-twitter fa-lg me-1" style="color: black"></i>
+                    </a>
+                </div>
+                <div>
+                    <a href="https://api.whatsapp.com/send?text={{ urlencode($product->name . ' ' . url()->current()) }}" target="_blank">
+                        <i class="fa-brands fa-whatsapp fa-lg" style="color: black"></i></a>
+                    </div>
+                </div>
 
-                @can('is-admin')
-                <!-- Tombol Edit -->
-                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary" style="width: 100%; text-align: center;">
+
+                <br><br>
+
+                <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
+
+                    @can('is-admin')
+                    <!-- Tombol Edit -->
+                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary" style="width: 100%; text-align: center;">
                     Edit
                 </a>
                 @endcan
