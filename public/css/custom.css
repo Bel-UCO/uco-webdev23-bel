@@ -23,3 +23,5 @@
     font-size: 12px; /* Ukuran simbol panah */
 }
 
+:root { --swiper-theme-color: rgba(255, 255, 255, 0.8)
+    !important};

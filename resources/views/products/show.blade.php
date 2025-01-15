@@ -27,7 +27,7 @@
                 </div>
 
                 <!-- Add Pagination -->
-                <div class="swiper-pagination text-white"></div>
+                <div class="swiper-pagination text-white" style="color: white"></div>
 
                 <!-- Add Navigation -->
                 <div class="swiper-button-next" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); color: rgba(255, 255, 255, 0.6);"></div>
