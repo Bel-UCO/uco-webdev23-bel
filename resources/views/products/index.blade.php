@@ -7,9 +7,14 @@
     @endif
 
     <div class="row" style="margin: 10pt 20pt 0pt 20pt">
-        {{-- <div class="col-12 col-md-12 text-end mb-3">
+
+        @can('is-admin')
+        <div class="col-12 col-md-12 text-end mb-3">
             <button class="btn btn-secondary" type="button" onclick="window.location.href='{{ route('products.form') }}'">Create +</button>
-        </div> --}}
+        </div>
+        @endcan
+
+
         @if ($products->isEmpty())
             <div style="display:flex; align-items:center; justify-content:center; height:400px">
                 <p>There's no such item.</p>
@@ -70,7 +75,6 @@
                             @endcan
 
                             @cannot('is-admin')
-
                             <div style="position:absolute; bottom:10px; right:10px">
                                 <form method="POST" action="{{ route('cart.add') }}">
                                     @csrf
