@@ -12,4 +12,9 @@
         <a class="btn btn-success ms-3" href="{{ route('categories.create') }}">Create +</a>
         <a class="btn btn-success ms-3" href="{{ route('categories.list') }}">List of Categories</a>
     </div>
+    <br><br>
+    <h3 class="ms-3">Main Banner</h3>
+    <div class="ms-3">
+        <a class="btn btn-success ms-3" href="{{ route('landing.edit') }}">Edit</a>
+    </div>
 </x-template>

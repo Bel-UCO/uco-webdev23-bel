@@ -66,5 +66,11 @@ class User extends Authenticatable
         return $this->hasMany(Checkout::class, 'user_id');
     }
 
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+
 
 }

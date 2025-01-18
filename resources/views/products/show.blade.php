@@ -65,22 +65,46 @@
             </p>
             <br>
             <p>{{ $product->description}}</p>
-            <div style="display: flex; flex-direction: row; color: black; width: 100%; justify-content:end;">
+
+            <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                <!-- Favorite -->
                 <div>
-                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank">
-                        <i class="fab fa-facebook fa-lg me-1" style="color: black"></i>
-                    </a>
+                    @cannot('is-admin')
+                    @if (auth()->check() && App\Models\Favorite::where('user_id', Auth::user()->id)->where('product_id', $product->id)->exists())
+                        <form action="{{ route('favorites.remove', $product->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" style="background: none; border: none; cursor: pointer;"><i class="fa-solid fa-heart fa-lg" style="color: red;"></i></button>
+                        </form>
+                    @else
+                        <form action="{{ route('favorites.add', $product->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" style="background: none; border: none; cursor: pointer;"><i class="fa-regular fa-heart fa-lg"></i></button>
+                        </form>
+                    @endif
+
+                    @endcannot
                 </div>
-                <div>
-                    <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($product->name) }}" target="_blank">
-                        <i class="fa-brands fa-x-twitter fa-lg me-1" style="color: black"></i>
-                    </a>
-                </div>
-                <div>
-                    <a href="https://api.whatsapp.com/send?text={{ urlencode($product->name . ' ' . url()->current()) }}" target="_blank">
-                        <i class="fa-brands fa-whatsapp fa-lg" style="color: black"></i></a>
+
+                <!-- Share -->
+                <div style="display: flex; gap: 10px;">
+                    <div>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank">
+                            <i class="fab fa-facebook fa-lg me-1" style="color: black;"></i>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($product->name) }}" target="_blank">
+                            <i class="fa-brands fa-x-twitter fa-lg me-1" style="color: black;"></i>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="https://api.whatsapp.com/send?text={{ urlencode($product->name . ' ' . url()->current()) }}" target="_blank">
+                            <i class="fa-brands fa-whatsapp fa-lg" style="color: black;"></i>
+                        </a>
                     </div>
                 </div>
+            </div>
 
 
                 <br><br>

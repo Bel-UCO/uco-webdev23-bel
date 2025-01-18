@@ -11,6 +11,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\App;
+use App\Http\Controllers\FavoriteController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -68,4 +70,11 @@ Route::get('/admin', function(){
 Route::prefix('/landing')->controller(LandingController::class)->middleware('can:is-admin')->group(function() {
     Route::get('/edit', 'edit')->name('landing.edit');
     Route::post('/store', 'store')->name('landing.store');
+});
+
+
+Route::prefix('/favorites')->controller(FavoriteController::class)->middleware(['auth', 'deny-admin'])->group(function () {
+    Route::post('/add/{id}', 'addToFavorites')->name('favorites.add');
+    Route::delete('/remove/{id}', 'removeFromFavorites')->name('favorites.remove');
+    Route::get('/', 'viewFavorites')->name('favorites.view');
 });

@@ -38,5 +38,11 @@ class Product extends Model
         return $this->hasMany(CheckoutList::class, 'product_id');
     }
 
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+
 
 }

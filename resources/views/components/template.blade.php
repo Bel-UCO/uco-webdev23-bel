@@ -87,6 +87,7 @@
 
                             @cannot('is-admin')
                             <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="{{route('favorites.view')}}">Favorites</a></li>
                             <li><a class="dropdown-item" href="{{ route('purchase.history') }}">Purchase history</a></li>
                             <li><hr class="dropdown-divider"></li>
                             @endcannot
