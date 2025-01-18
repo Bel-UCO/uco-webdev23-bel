@@ -3,15 +3,15 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RegistrationController;
 
-Route::get('/', function () {
-    return view('home', ['showFilters' => false]);
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::prefix('/products')->controller(ProductController::class)->group(function () {
     Route::get('/', 'index')->name('products.list');
@@ -64,3 +64,7 @@ Route::get('/purchase/history', [PurchaseController::class, 'history'])->middlew
 Route::get('/admin', function(){
     return view('admin.home', ['showFilters' => false]);})->middleware('can:is-admin')->name('admin.home');
 
+Route::prefix('/landing')->controller(LandingController::class)->middleware('can:is-admin')->group(function() {
+    Route::get('/edit', 'edit')->name('landing.edit');
+    Route::post('/store', 'store')->name('landing.store');
+});

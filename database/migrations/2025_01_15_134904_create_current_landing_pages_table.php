@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('current_landing_pages', function (Blueprint $table) {
             $table->id();
-            $table->text('image');
+            $table->longText('image');
             $table->timestamps();
         });
 
-        DB::statement('ALTER TABLE current_landing_pages MODIFY image LONGBLOB');
     }
 
     /**
