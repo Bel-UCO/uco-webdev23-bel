@@ -28,8 +28,17 @@
                 @endcan
 
             </div>
+
+            @foreach ($categories as $category)
+            <div class="carousel-item">
+                <a href="{{ route('products.list', ['category' => $category->order_no]) }}">
+                    <img src="{{ asset($category->image) }}" class="d-block w-100" alt="Category {{ $category->order_no }}">
+                </a>
+            </div>
+            @endforeach
+
 0
-            <!-- Category Banners -->
+            {{-- <!-- Category Banners -->
             <div class="carousel-item">
                 <a href="{{ route('products.list', ['category' => 1]) }}">
                     <img src="{{ asset('assets/1.jpg') }}" class="d-block w-100" alt="Category 1">
@@ -74,7 +83,8 @@
                 <a href="{{ route('products.list', ['category' => 9]) }}">
                     <img src="{{ asset('assets/9.jpg') }}" class="d-block w-100" alt="Category 3">
                 </a>
-            </div>
+            </div> --}}
+
             <!-- Add more category images similarly -->
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">

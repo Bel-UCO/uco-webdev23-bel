@@ -29,6 +29,10 @@ class ProductsTableSeeder extends Seeder
             $image2 = $this->getImageBinary($imageUrl2);  // Gambar kedua
             $image3 = $this->getImageBinary($imageUrl3);  // Gambar ketiga
 
+            if (is_null($image1) || is_null($image2) || is_null($image3)) {
+                Log::warning("One or more images failed to fetch for product: $productName");
+            }
+
             // Insert produk ke dalam tabel 'products'
             DB::table('products')->insert([
                 'name' => $productName,  // Nama produk acak (2-4 kata)
@@ -64,7 +68,7 @@ class ProductsTableSeeder extends Seeder
 
                 // If this is the last attempt, rethrow the exception
                 if ($attempt === $maxRetries) {
-                    throw $e;
+                    return null;
                 }
 
                 // Wait before retrying
