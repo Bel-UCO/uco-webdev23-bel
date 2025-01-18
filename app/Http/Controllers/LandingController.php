@@ -22,14 +22,14 @@ class LandingController extends Controller
         ]);
 
         // Ambil file
-        $file = $request->file('image');
+        $file = $request->file('image')->store('landing', 'public');
 
-        // Konversi ke Base64
-        $base64Image = base64_encode(file_get_contents($file->path()));
+        // $extension = $request->file('image')->getClientOriginalExtension();
+        // $file = $request->file('image')->storeAs('landing', uniqid() . '.' . $extension, 'public');
 
         // Simpan ke database
         CurrentLandingPage::create([
-            'image' => $base64Image
+            'image' => 'storage/' . $file,
         ]);
 
         return redirect()->route('home');

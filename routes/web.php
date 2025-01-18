@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RegistrationController;
+use Illuminate\Support\Facades\App;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 

@@ -8,7 +8,8 @@ class Category extends Model
 {
     protected $fillable = [
         "name",
-        "order_no"
+        "order_no",
+        "image"
     ] ;
 
     public static function getOrdered()

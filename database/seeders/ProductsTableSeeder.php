@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Log;
 
 class ProductsTableSeeder extends Seeder
 {
@@ -18,12 +19,12 @@ class ProductsTableSeeder extends Seeder
             // Generate random product name with 2 to 4 words
             $productName = $faker->words(rand(2, 4), true); // Nama produk terdiri dari 2-4 kata
 
-            // Generate random image URLs
+            // // Generate random image URLs
             $imageUrl1 = 'https://picsum.photos/350/350'; // Gambar pertama
             $imageUrl2 = 'https://picsum.photos/350/350'; // Gambar kedua
             $imageUrl3 = 'https://picsum.photos/350/350'; // Gambar ketiga
 
-            // Mendapatkan binary data dari URL gambar
+            // // Mendapatkan binary data dari URL gambar
             $image1 = $this->getImageBinary($imageUrl1);  // Gambar pertama
             $image2 = $this->getImageBinary($imageUrl2);  // Gambar kedua
             $image3 = $this->getImageBinary($imageUrl3);  // Gambar ketiga
@@ -50,7 +51,29 @@ class ProductsTableSeeder extends Seeder
     // Fungsi untuk mengambil gambar sebagai binary dari URL
     private function getImageBinary($url)
     {
-        // Mendapatkan gambar dari URL dan mengembalikannya sebagai binary
-        return file_get_contents($url);
+        $maxRetries = 3; // Maximum number of retry attempts
+        $retryDelay = 2; // Delay in seconds between retries
+
+        for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+            try {
+                // Try fetching the image content
+                return file_get_contents($url);
+            } catch (\Exception $e) {
+                // Log the error (optional)
+                Log::warning("Attempt $attempt: Failed to fetch image from $url. Error: " . $e->getMessage());
+
+                // If this is the last attempt, rethrow the exception
+                if ($attempt === $maxRetries) {
+                    throw $e;
+                }
+
+                // Wait before retrying
+                sleep($retryDelay);
+            }
+        }
+
+        // If all retries fail, return null as a fallback
+        return null;
     }
+
 }

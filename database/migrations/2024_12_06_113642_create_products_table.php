@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('subcategory');
             $table->integer('price');
             $table->integer('discount');
-            $table->text('image1');  // Ganti dengan text jika kolom ini berisi data besar (untuk LONGBLOB)
+            $table->text('image1')->nullable();  // Ganti dengan text jika kolom ini berisi data besar (untuk LONGBLOB)
             $table->text('image2')->nullable();
             $table->text('image3')->nullable();
             $table->text('description')->nullable();

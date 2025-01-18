@@ -10,20 +10,11 @@ class CurrentLandingPageSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run()
     {
-        $imagePath = public_path('assets/NEW.jpg');
-
-        if (file_exists($imagePath)) {
-            $imageBlob = file_get_contents($imagePath); // Membaca file sebagai binary data
-
-            DB::table('current_landing_pages')->insert([
-                'image' => $imageBlob, // Simpan binary data ke kolom
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        } else {
-            echo "File $imagePath tidak ditemukan.\n";
-        }
+        // Insert a single record into the current_landing_pages table
+        DB::table('current_landing_pages')->insert([
+            'image' => 'assets/NEW.jpg' // Path to the new landing page asset
+        ]);
     }
 }

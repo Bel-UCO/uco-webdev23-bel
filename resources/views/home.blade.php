@@ -12,8 +12,14 @@
             <!-- Newest Product Banner -->
             <div class="carousel-item active">
                 <a href="{{ route('products.list') }}">
-                    <img src="{{ asset('assets/NEW.jpg') }}" class="d-block w-100" alt="Newest Product">
+                    @if($image && $image->image)
+                        <img src="{{ asset($image->image) }}" class="d-block w-100" alt="Newest Product"
+                             onerror="this.onerror=null;this.src='{{ asset('assets/NEW.jpg') }}';">
+                    @else
+                        <img src="{{ asset('assets/NEW.jpg') }}" class="d-block w-100" alt="Fallback Image">
+                    @endif
                 </a>
+
 
                 @can('is-admin')
                 <a href="{{ route('landing.edit') }}">

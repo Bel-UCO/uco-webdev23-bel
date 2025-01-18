@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\App;
 
 class ProductController extends Controller
 {
 
     public function index(Request $request)
     {
+
         // Ambil semua produk beserta kategori (relasi)
         $products = Product::with('category');
 
