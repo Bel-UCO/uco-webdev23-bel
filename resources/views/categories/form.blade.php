@@ -1,6 +1,9 @@
-<x-template title="Create" >
+<x-template title="Create">
     <div class="form-container">
-        <form action="{{ isset($category->id) ? route('categories.update', ['id' => $category->id]) : route('categories.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateInput()">
+        <form id="uploadForm"
+              action="{{ isset($category->id) ? route('categories.update', ['id' => $category->id]) : route('categories.store') }}"
+              method="POST"
+              enctype="multipart/form-data">
             @csrf
 
             <!-- Name Field -->
@@ -15,6 +18,14 @@
 
             <br><br>
 
+            <!-- Image Field -->
+            <div class="mb-3">
+                <label for="image" class="form-label">Image</label>
+                <input type="file" class="form-control" name="image" id="image" accept="image/*" required>
+            </div>
+            <p id="errorMessage" style="color: red; display: none;">Dimensi gambar harus 1080x500 piksel.</p>
+
+            <!-- Form Actions -->
             <div class="form-actions">
                 <a href="{{ route('categories.list') }}" class="btn btn-secondary">Back</a>
                 <button type="submit" class="submit-btn">Submit</button>
@@ -23,23 +34,46 @@
     </div>
 
     <script>
-        function validateInput() {
-            // Order Number Checker
-            var orderNo = document.getElementById("order_no").value;
-            if (orderNo < 1) {
-                alert("Order number must be greater than 0.");
-                return false; // Prevent form submission
-            }
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('image');
+        const errorMessage = document.getElementById('errorMessage');
 
-            // Name Checker
-            var name = document.getElementById("name").value.trim();
-            if (name === "") {
-                alert("Name cannot be empty.");
-                return false; // Prevent form submission
-            }
+        // Event listener untuk validasi file sebelum pengiriman
+        form.addEventListener('submit', (event) => {
+            const file = fileInput.files[0]; // Ambil file yang dipilih
+            if (file) {
+                const img = new Image();
+                img.src = URL.createObjectURL(file); // Buat URL sementara untuk membaca gambar
 
-            return true; // Allow form submission if validation passes
-        }
+                // Periksa dimensi gambar setelah gambar dimuat
+                img.onload = () => {
+                    const { width, height } = img;
+
+                    if (width !== 1080 || height !== 500) {
+                        errorMessage.textContent = 'Dimensi gambar harus 1080x500 piksel.';
+                        errorMessage.style.display = 'block';
+                        return; // Batalkan pengiriman, karena validasi gagal
+                    } else {
+                        errorMessage.style.display = 'none';
+                        form.submit(); // Kirim formulir jika validasi lolos
+                    }
+                };
+
+                // Jika gambar gagal dimuat, tampilkan error
+                img.onerror = () => {
+                    errorMessage.textContent = 'File yang diunggah bukan gambar.';
+                    errorMessage.style.display = 'block';
+                    return; // Batalkan pengiriman
+                };
+
+                // Mencegah pengiriman formulir sampai gambar selesai divalidasi
+                event.preventDefault();
+            } else {
+                errorMessage.textContent = 'Harap pilih file gambar.';
+                errorMessage.style.display = 'block';
+                event.preventDefault(); // Batalkan pengiriman formulir
+            }
+        });
     </script>
 
     <style>

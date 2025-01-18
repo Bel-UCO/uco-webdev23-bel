@@ -34,8 +34,16 @@
                 <a href="{{ route('products.list', ['category' => $category->order_no]) }}">
                     <img src="{{ asset($category->image) }}" class="d-block w-100" alt="Category {{ $category->order_no }}">
                 </a>
+
+                @can('is-admin')
+                <a href="{{ route('categories.edit', ['id' => $category->id]) }}">
+                    <i class="fa-solid fa-pen-to-square fa-lg" style="position: absolute; top: 20px; right: 200px; color: rgba(255, 255, 255, 0.8);"></i>
+                </a>
+                @endcan
             </div>
             @endforeach
+
+
 
 0
             {{-- <!-- Category Banners -->

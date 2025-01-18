@@ -34,9 +34,19 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+
+        $request->validate([
+            'name' => 'required|string',
+            'order_no' => 'required|numeric',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $file = $request->file('image')->store('categories', 'public');
+
         $category = Category::create([
             'name' => $request->name,
-            'order_no' => $request->order_no
+            'order_no' => $request->order_no,
+            'image' => 'storage/' . $file
         ]);
 
         return redirect()->route('categories.list');
@@ -59,12 +69,37 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // Validasi data
+        $request->validate([
+            'name' => 'required|string',
+            'order_no' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Gambar bersifat opsional
+        ]);
+
+        // Temukan kategori berdasarkan ID
         $category = Category::where('id', $id)->firstOrFail();
+
+        // Update data kategori
         $category->name = $request->name;
         $category->order_no = $request->order_no;
+
+        // Cek apakah ada file gambar baru yang diunggah
+        if ($request->hasFile('image')) {
+            // Hapus file gambar lama jika ada
+            if ($category->image && file_exists(public_path($category->image))) {
+                unlink(public_path($category->image));
+            }
+
+            // Simpan file gambar baru
+            $file = $request->file('image')->store('categories', 'public');
+            $category->image = 'storage/' . $file;
+        }
+
+        // Simpan perubahan
         $category->save();
 
-        return redirect()->route('categories.list');
+        // Redirect kembali ke daftar kategori
+        return redirect()->route('categories.list')->with('success', 'Category updated successfully.');
     }
 
     /**
