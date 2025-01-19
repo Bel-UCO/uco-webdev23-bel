@@ -43,7 +43,7 @@
                                 <!-- Product Name and Image -->
                                 <td class="align-middle">
                                     <a class="product-link d-flex align-items-center" href="{{ route('products.show', $item->product->id) }}">
-                                        <img alt="Product Image" class="product-image me-2" src="data:image/jpeg;base64,{{ base64_encode($item->product->image1) }}">
+                                        <img alt="Product Image" class="product-image me-2" src="data:image/jpeg;base64,{{ base64_encode($item->product->image1) }}" onerror="this.onerror=null;this.src='https://fastly.picsum.photos/id/468/350/350.jpg?hmac=4jGTGKUJEby3tFz0qbVu3WGj1yrH6k2JZVcnjAIkAz0';">
                                         <span>{{ $item->product->name }} {{ $item->product->subcategory }}</span>
                                     </a>
                                 </td>

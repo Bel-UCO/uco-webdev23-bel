@@ -16,13 +16,13 @@
                         <img src="{{ route('products.image2', ['id' => $product->id]) }}"
                             alt="Product Image"
                             style="width: 100%; height: 100%; object-fit: cover;"
-                            onerror="this.onerror=null;this.src='https://fastly.picsum.photos/id/274/350/350.jpg?hmac=untj6RC6C78hvqY-k-jH_U0li8N1hzcH_dQeaW2jlW0">
+                            onerror="this.onerror=null;this.src='https://fastly.picsum.photos/id/274/350/350.jpg?hmac=untj6RC6C78hvqY-k-jH_U0li8N1hzcH_dQeaW2jlW0';">
                     </div>
                     <div class="swiper-slide">
                         <img src="{{ route('products.image3', ['id' => $product->id]) }}"
                             alt="Product Image"
                             style="width: 100%; height: 100%; object-fit: cover;"
-                            onerror="this.onerror=null;this.src='https://fastly.picsum.photos/id/1025/350/350.jpg?hmac=H6E-8iwt33C43jRY3gBG0op4jjFBVNWpgByULLAYd9k">
+                            onerror="this.onerror=null;this.src='https://fastly.picsum.photos/id/1025/350/350.jpg?hmac=H6E-8iwt33C43jRY3gBG0op4jjFBVNWpgByULLAYd9k';">
                     </div>
                 </div>
 

@@ -75,7 +75,7 @@
                             @endphp
                             <tr>
                                 <td>
-                                    <img src="data:image/jpeg;base64,{{ base64_encode($item->product->image1) }}" alt="Product Image" style="width: 50px; height: 50px;">
+                                    <img src="data:image/jpeg;base64,{{ base64_encode($item->product->image1) }}" alt="Product Image" style="width: 50px; height: 50px;" onerror="this.onerror=null;this.src='https://fastly.picsum.photos/id/468/350/350.jpg?hmac=4jGTGKUJEby3tFz0qbVu3WGj1yrH6k2JZVcnjAIkAz0';">
                                 </td>
                                 <td>{{ $item->product->name }} {{ $item->product->subcategory }}</td>
                                 <td>Rp {{ number_format($priceAfterDiscount, 0, '.', '.') }}</td>
