@@ -78,3 +78,7 @@ Route::prefix('/favorites')->controller(FavoriteController::class)->middleware([
     Route::delete('/remove/{id}', 'removeFromFavorites')->name('favorites.remove');
     Route::get('/', 'viewFavorites')->name('favorites.view');
 });
+
+Route::view('/about-adidas-products', 'static.about')->name('static.about');
+Route::view('/using-our-sites', 'static.sites')->name('static.sites');
+Route::view('/delivery', 'static.delivery')->name('static.delivery');

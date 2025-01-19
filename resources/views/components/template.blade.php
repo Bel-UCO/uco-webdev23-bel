@@ -15,7 +15,47 @@
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 
+    <style>
+        /* Ensure the page layout fills the viewport */
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1; /* Pushes the footer down */
+        }
+
+        .footer {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            background-color: #363636;
+            color: white;
+        }
+
+        .footer a {
+            text-decoration: none;
+            color: white;
+            padding: 5px 10px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer p {
+            margin: 0;
+            padding: 5px 10px;
+        }
+    </style>
 </head>
+
 <body>
 
 
@@ -86,7 +126,7 @@
                         <ul class="dropdown-menu dropdown-menu-end">
 
                             @cannot('is-admin')
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            {{-- <li><a class="dropdown-item" href="#">Profile</a></li> --}}
                             <li><a class="dropdown-item" href="{{route('favorites.view')}}">Favorites</a></li>
                             <li><a class="dropdown-item" href="{{ route('purchase.history') }}">Purchase history</a></li>
                             <li><hr class="dropdown-divider"></li>
@@ -145,6 +185,17 @@
     <!-- Placeholder Konten -->
     <main class="container mt-4">
         {{ $slot }}
+        <br>
     </main>
+
+    <div class="footer">
+        <a href="{{ route('static.about') }}">About Adidas Products</a>
+        <p>|</p>
+        <a href="{{ route('static.sites') }}">Using Our Sites</a>
+        <p>|</p>
+        <a href="{{ route('static.delivery') }}">Delivery Inquiries</a>
+        <p>|</p>
+        <p>© 2021 Adidas</p>
+    </div>
 </body>
 </html>
