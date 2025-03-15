@@ -79,6 +79,6 @@ Route::prefix('/favorites')->controller(FavoriteController::class)->middleware([
     Route::get('/', 'viewFavorites')->name('favorites.view');
 });
 
-Route::view('/about-adidas-products', 'static.about')->name('static.about');
+Route::view('/about-our-products', 'static.about')->name('static.about');
 Route::view('/using-our-sites', 'static.sites')->name('static.sites');
 Route::view('/delivery', 'static.delivery')->name('static.delivery');

@@ -63,11 +63,11 @@
         <div class="container-fluid">
             <!-- Logo -->
             <a class="navbar-brand" href="#">
-                <img src="{{ asset('assets/adidas-logo.png') }}" alt="Logo" width="40" height="40" class="d-inline-block align-text-top">
+                <img src="{{ asset('assets/logo.png') }}" alt="Logo" width="40" height="40" class="d-inline-block align-text-top">
             </a>
             <!-- Tombol Toggle -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <img src="{{ asset('assets/adidas-logo.png') }}" alt="Logo" width="30" height="30">
+                <img src="{{ asset('assets/logo.png') }}" alt="Logo" width="30" height="30">
             </button>
             <!-- Menu Navigasi -->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -189,13 +189,13 @@
     </main>
 
     <div class="footer">
-        <a href="{{ route('static.about') }}">About Adidas Products</a>
+        <a href="{{ route('static.about') }}">About Our Products</a>
         <p>|</p>
         <a href="{{ route('static.sites') }}">Using Our Sites</a>
         <p>|</p>
         <a href="{{ route('static.delivery') }}">Delivery Inquiries</a>
         <p>|</p>
-        <p>© 2021 Adidas</p>
+        <p>© 2021</p>
     </div>
 </body>
 </html>

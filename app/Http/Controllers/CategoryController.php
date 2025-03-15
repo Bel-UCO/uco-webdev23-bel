@@ -86,9 +86,9 @@ class CategoryController extends Controller
         // Cek apakah ada file gambar baru yang diunggah
         if ($request->hasFile('image')) {
             // Hapus file gambar lama jika ada
-            if ($category->image && file_exists(public_path($category->image))) {
-                unlink(public_path($category->image));
-            }
+            // if ($category->image && file_exists(public_path($category->image))) {
+            //     unlink(public_path($category->image));
+            // }
 
             // Simpan file gambar baru
             $file = $request->file('image')->store('categories', 'public');
