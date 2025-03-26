@@ -12,6 +12,8 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\FavoriteController;
+use Inertia\Inertia;
+
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -82,3 +84,7 @@ Route::prefix('/favorites')->controller(FavoriteController::class)->middleware([
 Route::view('/about-our-products', 'static.about')->name('static.about');
 Route::view('/using-our-sites', 'static.sites')->name('static.sites');
 Route::view('/delivery', 'static.delivery')->name('static.delivery');
+
+Route::get('/home', function () {
+    return Inertia::render('Landing/Home');
+});

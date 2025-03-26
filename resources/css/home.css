@@ -1,0 +1,21 @@
+.button-selected {
+    border: 0px;
+    border-radius: 25px;
+    background-color: #CF6037;
+    color: #1E1E1E;
+    width: 20%;
+}
+
+.button-unselected {
+    border: 0px;
+    border-radius: 25px;
+    color: #CF6037;
+    width: 20%;
+}
+
+.navbar {
+    max-width: 65.625rem;
+    border-radius: 25px;
+    background-color: #1E1E1E;
+    align-content: center;
+}
