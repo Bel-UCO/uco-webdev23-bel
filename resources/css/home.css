@@ -1,3 +1,142 @@
+@import '/node_modules/primereact/resources/themes/lara-light-indigo/theme.css';
+@import '/node_modules/primereact/resources/primereact.min.css';
+@import '/node_modules/primeicons/primeicons.css';
+
+/* *{
+    font-size: 1rem;
+
+}
+
+@media only screen and (max-width:768px){
+
+    *{
+        font-size: 0.8rem;
+    }
+} */
+
+h1 {
+    font-weight: 900;
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+}
+
+h4 {
+    font-size: 1.5rem;
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1rem;
+}
+
+/* One OFF */
+
+.v-line {
+    width: 2px;
+    height: 6rem;
+    background-color: #F7F5F3;
+}
+
+.square {
+    width: 9.938rem;
+    height: 9.938rem;
+}
+
+.year {
+    width: 17rem;
+    margin-left: 1rem;
+}
+
+.pt-6rem{
+    padding-top: 6rem;
+}
+
+.pb-6rem{
+    padding-bottom: 6rem;
+}
+
+.mr-6rem {
+    margin-right: 6rem;
+}
+
+.ml-6rem {
+    margin-left: 6rem;
+}
+
+.orange {
+    color: #CF6037;
+}
+
+.white{
+    color: #F7F5F3;
+}
+
+.white-50 {
+    color: #F7F5F3;
+    opacity: 0.5;
+}
+
+.black {
+    color: #1E1E1E;
+}
+
+.black-50 {
+    color: #1E1E1E;
+    opacity: 0.5;
+}
+
+.big-orange-blob{
+    background-color: #CF6037;
+    width: 3.125rem;
+    height: 3.125rem;
+    border-radius: 50px;
+}
+
+.small-white-blob{
+    background-color: #F7F5F3;
+    width: 1.813rem;
+    height: 1.813rem;
+    border-radius: 50px;
+}
+
+.big-white-blob{
+    background-color: #F7F5F3;
+    width: 3.125rem;
+    height: 3.125rem;
+    border-radius: 50px;
+}
+
+.small-black-blob{
+    background-color: #1E1E1E;
+    width: 1.813rem;
+    height: 1.813rem;
+    border-radius: 50px;
+}
+
+/* FOR CUSTOM */
+
+.floating {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10%;
+    z-index: 1000;
+}
+
 .button-selected {
     border: 0px;
     border-radius: 25px;
@@ -14,8 +153,48 @@
 }
 
 .navbar {
-    max-width: 65.625rem;
+    width: 65.625rem;
     border-radius: 25px;
     background-color: #1E1E1E;
     align-content: center;
+    font-size: 1rem;
+    font-weight: 900;
+
+}
+
+.welcome {
+    margin-left: 9.25rem;
+    width: 39.25rem;
+    position: relative;
+    z-index: 10;
+}
+
+.welcome img {
+    width: 3rem;
+    height: 3rem;
+}
+
+.welcome .welcome-text {
+    padding-top: 18rem;
+
+}
+
+.welcome .contact{
+    margin-top: 5.9rem;
+    font-size: 1.25rem;
+    font-weight: 900;
+    padding-bottom: 3rem;
+}
+
+.welcome .contact p{
+    margin-left: 20px;
+}
+
+.me {
+    width: 42rem;
+    position: absolute;
+    top: 6.5rem;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
 }
