@@ -1,7 +1,9 @@
-const Education = () => {
+import React from "react"
+
+const Education =({educationRef}) => {
 
     return (
-    <div style={{backgroundColor:"#CF6037"}}>
+    <div id="education" ref={educationRef} style={{backgroundColor:"#CF6037"}}>
         <div>
             <h1 className="white pt-6rem ml-6rem">EDUCATION</h1>
         </div>

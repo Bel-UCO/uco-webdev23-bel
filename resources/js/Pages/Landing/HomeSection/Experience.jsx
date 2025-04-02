@@ -1,7 +1,9 @@
-const Experience = ()=>{
+import React from "react"
+
+const Experience = React.forwardRef((props,ref)=>{
 
     return (
-        <div style={{backgroundColor:"#1e1e1e"}}>
+        <div ref={ref} id="experience" style={{backgroundColor:"#1e1e1e"}}>
             <div>
                 <h1 className="orange pt-6rem ml-6rem">EXPERIENCE</h1>
             </div>
@@ -37,6 +39,6 @@ const Experience = ()=>{
             </div>
         </div>
     )
-}
+})
 
 export default Experience

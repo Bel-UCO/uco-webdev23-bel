@@ -1,7 +1,7 @@
-const Welcome = ()=>{
+const Welcome = ({welcomeRef})=>{
 
     return (
-        <div className="">
+        <div id="welcome" ref={welcomeRef} className="">
             <div className="me">
                 <img src="/porto/Me.svg"/>
             </div>

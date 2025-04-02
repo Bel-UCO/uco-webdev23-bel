@@ -1,6 +1,6 @@
-const Skills = () => {
+const Skills = ({skillsRef}) => {
     return (
-        <div>
+        <div id="skills" ref={skillsRef}>
             <div>
                 <h1 className="pt-6rem ml-6rem">SKILLS</h1>
             </div>
