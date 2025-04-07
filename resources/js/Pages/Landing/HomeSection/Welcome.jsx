@@ -2,14 +2,12 @@ const Welcome = ({welcomeRef})=>{
 
     return (
         <div id="welcome" ref={welcomeRef} className="">
-            <div className="me">
-                <img src="/porto/Me.svg"/>
-            </div>
+
             <div className="welcome">
 
                 <div className="welcome-text">
                     <h1>WELCOME</h1>
-                    <p className="font-semibold text-2xl">MY NAME IS BELINDA. CURRENTLY STUDYING AT
+                    <p className="font-semibold text-sm md:text-2xl">MY NAME IS BELINDA. CURRENTLY STUDYING AT
                     CIPUTRA UNIVERSITY. HAVE EXPERIENCE IN MAKING
                     WEBSITE WITH HTML, CSS, PHP, AND LARAVEL.</p>
                 </div>
@@ -36,6 +34,11 @@ const Welcome = ({welcomeRef})=>{
                             <p>Tangerang</p>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div className="w-full">
+                <div className="me">
+                    <img src="/porto/Me.svg"/>
                 </div>
             </div>
 

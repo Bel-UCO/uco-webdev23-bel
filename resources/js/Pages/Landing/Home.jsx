@@ -50,15 +50,15 @@ const Home = () => {
     }, []);
 
     const scrollToWelcome = () => {
-        welcomeRef?.current?.scrollIntoView({ behaviour: "smooth" });
+        welcomeRef?.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     const scrollToExperience = () => {
-        experienceRef?.current?.scrollIntoView({ behaviour: "smooth" });
+        experienceRef?.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     const scrollToEducation = () => {
-        educationRef?.current?.scrollIntoView({ behaviour: "smooth" });
+        educationRef?.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     const scrollToSkills = () => {
@@ -71,7 +71,7 @@ const Home = () => {
 
     return (
         <div className="" style={{ backgroundColor: "#F7F5F3" }}>
-            <div className="w-full flex flex-row justify-content-center floating">
+            <div className="w-full flex flex-row justify-content-center floating w-screen">
                 <Navbar
                     selectedIndex={selectedIndex}
                     setSelectedIndex={setSelectedIndex}

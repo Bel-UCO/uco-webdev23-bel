@@ -2,17 +2,7 @@
 @import '/node_modules/primereact/resources/primereact.min.css';
 @import '/node_modules/primeicons/primeicons.css';
 
-/* *{
-    font-size: 1rem;
 
-}
-
-@media only screen and (max-width:768px){
-
-    *{
-        font-size: 0.8rem;
-    }
-} */
 
 h1 {
     font-weight: 900;
@@ -191,10 +181,114 @@ h6 {
 }
 
 .me {
-    width: 42rem;
     position: absolute;
-    top: 6.5rem;
+    top: 3.5rem;
     right: 0;
     bottom: 0;
     z-index: 0;
+}
+
+@media only screen and (max-width:768px){
+
+    *{
+        font-size: 0.8rem;
+    }
+
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    h4 {
+        font-size: 1.25rem;
+    }
+
+    h5 {
+        font-size: 1rem;
+    }
+
+    h6 {
+        font-size: 0.75rem;
+    }
+
+    .navbar {
+        font-size: 0.7rem;
+        width: 100%;
+    }
+
+    .me {
+        position: absolute;
+        top: 18rem;
+        right: 0rem;
+    }
+
+    .me img {
+        height: 20rem;
+    }
+
+
+    .welcome {
+        margin-left: 4rem;
+        width: 20rem;
+    }
+
+    .welcome img{
+        height: 1rem;
+        width: 1rem;
+    }
+
+    .welcome .welcome-text {
+        padding-top: 10rem;
+
+    }
+
+    .welcome .contact {
+        padding-bottom: 10.2rem;
+    }
+
+    .big-orange-blob {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    .small-white-blob {
+        width: 0.5rem;
+        height: 0.5rem;
+    }
+
+    .big-white-blob {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    .small-black-blob {
+        width: 0.5rem;
+        height: 0.5rem;
+    }
+
+    .v-line {
+        height: 100%;
+    }
+
+    .ml-6rem {
+        margin-left: 3rem;
+    }
+
+    .mr-6rem {
+        margin-right: 3rem;
+    }
+
+    .square {
+        width: 5rem;
+        height: 5rem;
+    }
+
 }
